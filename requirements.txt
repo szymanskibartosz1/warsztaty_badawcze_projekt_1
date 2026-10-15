@@ -1,0 +1,8 @@
+ipykernel
+numpy
+pandas
+pyarrow
+implicit
+scipy
+psutil
+threadpoolctl
