@@ -1,0 +1,12 @@
+.env
+notattki.txt
+data/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# z cache/ potrzebne są tylko zapisane wyniki LLM i embeddingi
+cache/*
+!cache/llm_features.jsonl
+!cache/emb_sbert.npy
+!cache/emb_openai.npy

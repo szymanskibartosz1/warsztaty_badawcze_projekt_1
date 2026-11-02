@@ -1,0 +1,3 @@
+cechy,RMSE walidacja (CV),RMSE test przed strojeniem,RMSE test po strojeniu,MAE test po strojeniu
+struktura,694.8,610.7,595.0,408.2
+wszystko,630.0,552.2,547.1,369.6
