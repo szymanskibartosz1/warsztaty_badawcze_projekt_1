@@ -1,3 +1,5 @@
+sprawozdanie: https://www.overleaf.com/project/6aec495ae6b06763ca66a1c4/share#fe67fa52a23643831e3b1d4b3dd48c725a777be786394645
+
 # Projekt 2 – predykcja ceny za m² (rynek wtórny, Poznań)
 
 Cały kod jest w notebooku **`projekt2_olx.ipynb`** (uruchamiać od góry do dołu).
