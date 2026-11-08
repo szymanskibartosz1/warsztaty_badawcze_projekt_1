@@ -1,0 +1,11 @@
+{
+ "karta_scoringowa": [
+  "podatek_dochodowy",
+  "Kapital_wlasny",
+  "wsk_ogolnego_zadluzenia_1",
+  "wsk_zysk_zobowiazania",
+  "wsk_stopa_zysku_sprzedaz",
+  "wsk_sytuacji_fin",
+  "pozostale_przychody_oper"
+ ]
+}
