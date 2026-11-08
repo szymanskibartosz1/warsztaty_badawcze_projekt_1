@@ -12,7 +12,6 @@ i **XGBoost**, z wyjaśnieniami (SHAP, PDP / ICE / ALE, LIME), eksperymentami wi
 | `RAPORT.md` | raport techniczny z pełnymi wynikami |
 | `MODEL_CARD.md` | karta modelu: cel, dane, ograniczenia, wyjaśnienia, kalibracja 4%, monitoring, użycie AI |
 | `prezentacja_projekt1.pptx` | prezentacja dla osób nietechnicznych (12 slajdów) |
-| `skrypty/prezentacja.py` | generuje prezentację z wykresów w `wykresy/` |
 | `dane/` | `zbior_13.csv`, słownik zmiennych (PDF i CSV) |
 | `wyniki/` | zapisany podział (`podzial.csv`), wersje cech (`cechy_v1.json`, `cechy_karty.json`), parametry XGBoost, PD na teście, podsumowanie |
 | `wykresy/` | wykresy użyte w raporcie i prezentacji |
@@ -24,10 +23,9 @@ python -m venv .venv
 .venv\Scripts\activate            # Linux / macOS: source .venv/bin/activate
 pip install -r requirements.txt
 jupyter nbconvert --to notebook --execute --inplace projekt1_rating.ipynb     # albo Run All w Jupyterze
-python skrypty/prezentacja.py
 ```
 
-Notebook uruchamiamy z folderu `projekt1` (ścieżki względne). Pełne uruchomienie trwa ok. 5 minut (Python 3.11, laptop
+Notebook uruchamiamy z folderu projektu (ścieżki względne). Pełne uruchomienie trwa ok. 5 minut (Python 3.11, laptop
 z 6-rdzeniowym CPU); najdłużej trwa strojenie XGBoost i eksperymenty stabilności LIME.
 
 ## Replikowalność
