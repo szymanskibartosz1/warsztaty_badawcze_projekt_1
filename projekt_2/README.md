@@ -1,4 +1,5 @@
 sprawozdanie: https://www.overleaf.com/project/6aec495ae6b06763ca66a1c4/share#fe67fa52a23643831e3b1d4b3dd48c725a777be786394645
+prezentacja: https://www.overleaf.com/project/6af5ffdb3ac8ca187bcd9607/share#de691eb326a2ee8adca59a2c3844adec26c836c22266dfcd
 
 # Projekt 2 – predykcja ceny za m² (rynek wtórny, Poznań)
 
