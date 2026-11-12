@@ -1,7 +1,8 @@
 # Projekt 1 - model ratingowy z interpretowalnością, wyjaśnialnością i kalibracją do 4%
 
 Dwa modele PD dla spółek z o.o. (`zbior_13.csv`): **karta scoringowa** (binning monotoniczny → WoE → regresja logistyczna)
-i **XGBoost**, z wyjaśnieniami (SHAP, PDP / ICE / ALE, LIME), eksperymentami wierności i stabilności wyjaśnień, kalibracją
+i **XGBoost**, z wyjaśnieniami (SHAP, PDP / ICE / ALE, LIME, a z Lab 6: ważność grup skorelowanych cech, statystyka H Friedmana,
+global surrogate), eksperymentami wierności i stabilności wyjaśnień, kalibracją
 (Platt / izotoniczna / beta, potem dostosowanie do tendencji centralnej 4%), skalą ratingową, progiem z funkcji zysku i analizą kontrfaktyczną.
 
 ## Struktura
@@ -14,7 +15,7 @@ i **XGBoost**, z wyjaśnieniami (SHAP, PDP / ICE / ALE, LIME), eksperymentami wi
 | `prezentacja_projekt1.pptx` | prezentacja dla osób nietechnicznych (12 slajdów) |
 | `dane/` | `zbior_13.csv`, słownik zmiennych (PDF i CSV) |
 | `wyniki/` | zapisany podział (`podzial.csv`), wersje cech (`cechy_v1.json`, `cechy_karty.json`), parametry XGBoost, PD na teście, podsumowanie |
-| `wykresy/` | wykresy użyte w raporcie i prezentacji |
+| `wykresy/` | wykresy użyte w raporcie i prezentacji (m.in. `surogat.png` - drzewo surogatu, `waterfall_graniczna_4proc.png` - SHAP modelu końcowego dla firmy granicznej przy progu operacyjnym) |
 
 ## Uruchomienie
 
@@ -25,8 +26,9 @@ pip install -r requirements.txt
 jupyter nbconvert --to notebook --execute --inplace projekt1_rating.ipynb     # albo Run All w Jupyterze
 ```
 
-Notebook uruchamiamy z folderu projektu (ścieżki względne). Pełne uruchomienie trwa ok. 5 minut (Python 3.11, laptop
-z 6-rdzeniowym CPU); najdłużej trwa strojenie XGBoost i eksperymenty stabilności LIME.
+Notebook uruchamiamy z folderu projektu (ścieżki względne). Pełne uruchomienie trwa ok. 20-25 minut (Python 3.11, laptop
+z 6-rdzeniowym CPU); najdłużej trwają statystyka H, drop-column (uczenie XGBoost od nowa dla każdej grupy cech),
+SHAP w wariancie interventional, strojenie XGBoost i eksperymenty stabilności LIME.
 
 ## Replikowalność
 
@@ -39,14 +41,16 @@ z 6-rdzeniowym CPU); najdłużej trwa strojenie XGBoost i eksperymenty stabilno�
 
 | | Karta scoringowa | XGBoost |
 |---|---|---|
-| Gini / KS / PR-AUC | 0,46 / 0,35 / 0,33 | 0,49 / 0,37 / 0,34 |
-| Liczba cech | 7 | 164 używane z 192 |
-| δ do średniego PD = 4% | −1,49 | −1,46 |
+| Gini / KS / PR-AUC | 0,562 / 0,440 / 0,430 | 0,586 / 0,462 / 0,468 |
+| Liczba cech | 8 (w tym `wsk_index_nowe`) | 158 używanych z 195 |
+| δ do średniego PD = 4% | −1,486 | −1,488 |
+| Próg z funkcji zysku (valid ważony do DR 4%; p* = 18,2%) | 16,5% | 16,0% |
 
-Przewaga XGBoost nie jest statystycznie istotna (różnica Gini +0,03, 95% CI [−0,04; +0,09]). Rekomendacja: karta scoringowa
-jako model ratingowy, XGBoost jako model kontrolny.
+Przewaga XGBoost jest umiarkowana: różnica Gini na teście +0,024, 95% CI [−0,032; +0,083] (nieistotna), na valid +0,055
+[+0,008; +0,099]. Najważniejsze predyktory to wskaźniki branżowe `wsk_index_*` (prowadzący potwierdził brak przecieku).
+Rekomendacja: karta scoringowa jako model ratingowy, XGBoost jako challenger.
 
 ## Użycie AI i kod z laboratoriów
 
 Przy projekcie korzystano z asystenta AI (Claude, Anthropic) - szczegóły w `MODEL_CARD.md`. Funkcje przeniesione z laboratoriów
-(Lab 1-5) są oznaczone w notebooku komentarzem `# z Lab N`.
+(Lab 1-6) są oznaczone w notebooku komentarzem `# z Lab N`.

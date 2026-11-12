@@ -1,5 +1,8 @@
 {
  "num_cols": [
+  "wsk_index_aktywne",
+  "wsk_index_skr_zaw",
+  "wsk_index_nowe",
   "wsk_liczba_dni_istnienia",
   "Aktywa",
   "Aktywa_trwale",
