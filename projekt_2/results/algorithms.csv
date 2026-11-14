@@ -1,6 +1,6 @@
-algorytm,RMSE struktura,RMSE wszystko
-Ridge,933.2,765.0
-Random Forest,771.5,675.5
-HistGradientBoosting,752.4,637.5
-XGBoost,733.7,600.3
-LightGBM,740.3,637.1
+algorytm,RMSE CV struktura,RMSE test struktura,RMSE CV wszystko,RMSE test wszystko
+Ridge,934.6,931.3,773.9,764.4
+Random Forest,770.7,783.7,717.6,677.8
+HistGradientBoosting,758.0,751.7,687.4,648.1
+XGBoost,759.6,745.8,681.1,606.1
+LightGBM,749.8,744.0,672.7,604.3
