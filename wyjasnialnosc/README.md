@@ -36,19 +36,22 @@ SHAP w wariancie interventional, strojenie XGBoost i eksperymenty stabilności L
 - Podział zapisany w `wyniki/podzial.csv` (zbiór i grupa dla każdego wiersza danych).
 - Wersje cech: `wyniki/cechy_v1.json` (cechy po kontroli jakości), `wyniki/cechy_karty.json` (cechy karty).
 - Wersje bibliotek: `requirements.txt`.
+- Wyniki XGBoost zależą od platformy: losowanie wierszy i kolumn (`subsample`, `colsample_bytree`) korzysta z rozkładów losowych
+  biblioteki standardowej C++, które różnią się między systemami operacyjnymi, więc to samo ziarno może dać na innym systemie nieco
+  inny black-box. Raportowane liczby pochodzą z jednego uruchomienia.
 
 ## Najważniejsze wyniki (test, 599 firm, 89 defaultów)
 
 | | Karta scoringowa | XGBoost |
 |---|---|---|
-| Gini / KS / PR-AUC | 0,562 / 0,440 / 0,430 | 0,586 / 0,462 / 0,468 |
-| Liczba cech | 8 (w tym `wsk_index_nowe`) | 158 używanych z 195 |
-| δ do średniego PD = 4% | −1,486 | −1,488 |
-| Próg z funkcji zysku (valid ważony do DR 4%; p* = 18,2%) | 16,5% | 16,0% |
+| Gini / KS / PR-AUC | 0,562 / 0,440 / 0,430 | 0,583 / 0,457 / 0,458 |
+| Liczba cech | 8 (w tym `wsk_index_nowe`) | 179 używanych z 195 |
+| δ do średniego PD = 4% (valid ważony do DR 4%) | −1,280 | −1,218 |
+| Próg z funkcji zysku (valid ważony do DR 4%; p* = 18,2%) | 15,0% | 20,5% |
 
-Przewaga XGBoost jest umiarkowana: różnica Gini na teście +0,024, 95% CI [−0,032; +0,083] (nieistotna), na valid +0,055
-[+0,008; +0,099]. Najważniejsze predyktory to wskaźniki branżowe `wsk_index_*` (prowadzący potwierdził brak przecieku).
-Rekomendacja: karta scoringowa jako model ratingowy, XGBoost jako challenger.
+Przewaga XGBoost jest mała i niepewna: różnica Gini na teście +0,021, 95% CI [−0,048; +0,089] (nieistotna), na valid +0,072
+[+0,019; +0,120] (istotna). Najważniejsze predyktory to wskaźniki branżowe `wsk_index_*` (prowadzący potwierdził brak przecieku).
+Rekomendacja, oparta na interpretowalności i stabilności wyjaśnień: karta scoringowa jako model ratingowy, XGBoost jako challenger.
 
 ## Użycie AI i kod z laboratoriów
 

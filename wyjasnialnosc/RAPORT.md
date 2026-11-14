@@ -39,8 +39,8 @@ statystycznie, dostosowujemy do tendencji centralnej 4%, mapujemy na skalę rati
 ```
               ┌──────────── train 60% (1 801) ─────────┐┌─ valid 20% (600) ─┐┌─ test 20% (599) ─┐
 dane (3000) → │ uczenie modeli, binning / WoE,         ││ kalibracja kształtu,││ wyłącznie ocena  │
-              │ selekcja cech, strojenie:              ││ δ do 4%, próg       ││ końcowa          │
-              │ StratifiedGroupKFold(5) wewnątrz train ││ (populacja ref.)    ││                  │
+              │ selekcja cech, strojenie:              ││ δ i próg na valid   ││ końcowa          │
+              │ StratifiedGroupKFold(5) wewnątrz train ││ ważonym do DR 4%    ││                  │
               └─────────────────────────────────────────┘└─────────────────────┘└──────────────────┘
 ```
 
@@ -89,26 +89,27 @@ liczba cech wybrana 5-krotną CV (najwyższe AUC przy k = 8; reguła 1 błędu s
 ## 4. Model black-box: XGBoost
 
 Wszystkie 195 cech (kategorie one-hot, rzadkie poziomy łączone), bez wag klas. **Strojenie:** losowe przeszukiwanie 40 konfiguracji
-w 5-krotnej grupowej CV na train, kryterium log-loss. Wybrano: 500 drzew, głębokość 5, `learning_rate` 0,02, `min_child_weight` 20,
-`subsample` 0,6, `colsample_bytree` 0,2, λ = 5, γ = 0 (`wyniki/xgboost_parametry.json`). **Kontrola przeuczenia:** AUC na foldach
-treningowych 0,886 vs 0,791 w CV - najmniejsza luka wśród najlepszych konfiguracji; wybór wyłącznie według CV.
+w 5-krotnej grupowej CV na train, kryterium log-loss. Wybrano: 800 drzew, głębokość 5, `learning_rate` 0,01, `min_child_weight` 5,
+`subsample` 0,6, `colsample_bytree` 0,5, λ = 5, γ = 2 (`wyniki/xgboost_parametry.json`). **Kontrola przeuczenia:** AUC na foldach
+treningowych 0,969 vs 0,791 w CV - luka 0,18 jest duża (konfiguracje z mocniejszą regularyzacją mają ok. 0,09-0,10), ale różnice
+log-loss w CV między 8 najlepszymi konfiguracjami nie przekraczają 0,002; wybór wyłącznie według CV (log-loss 0,350).
 
 ## 5. Porównanie jakości
 
 | Test (599 firm, 89 defaultów) | Karta | XGBoost |
 |---|---|---|
-| AUC [95% CI bootstrap] | 0,781 [0,724; 0,833] | 0,793 [0,740; 0,842] |
-| Gini | 0,562 | 0,586 |
-| KS | 0,440 | 0,462 |
-| PR-AUC (losowy: 0,149) | 0,430 | 0,468 |
-| log-loss | 0,350 | 0,341 |
-| Brier | 0,105 | 0,102 |
-| Gini w CV (5 foldów) | 0,546 ± 0,105 | 0,581 ± 0,091 |
-| Złożoność | 8 cech, 9 parametrów, 37 przedziałów | 158 używanych cech, 500 drzew, 2 305 liści |
+| AUC [95% CI bootstrap] | 0,781 [0,724; 0,833] | 0,792 [0,737; 0,842] |
+| Gini | 0,562 | 0,583 |
+| KS | 0,440 | 0,457 |
+| PR-AUC (losowy: 0,149) | 0,430 | 0,458 |
+| log-loss | 0,350 | 0,347 |
+| Brier | 0,105 | 0,104 |
+| Gini w CV (5 foldów) | 0,546 ± 0,105 | 0,581 ± 0,083 |
+| Złożoność | 8 cech, 9 parametrów, 37 przedziałów | 179 używanych cech, 800 drzew, 7 583 liści |
 
-Różnica Gini XGBoost − karta (sparowany bootstrap): test **+0,024 [−0,032; +0,083]**, valid **+0,055 [+0,008; +0,099]**.
-Przewaga black-boxa jest **umiarkowana**: istotna na valid, ale na teście przedział obejmuje zero, a rozrzut Gini między foldami CV
-(karta 0,43-0,66, XGBoost 0,48-0,67) jest kilka razy większy niż różnica między modelami.
+Różnica Gini XGBoost − karta (sparowany bootstrap): test **+0,021 [−0,048; +0,089]**, valid **+0,072 [+0,019; +0,120]**.
+Przewaga black-boxa jest **mała i niepewna**: istotna na valid, ale na teście przedział obejmuje zero, a rozrzut Gini między foldami CV
+(karta 0,43-0,66, XGBoost 0,49-0,66) jest kilka razy większy niż różnica między modelami.
 
 ![](wykresy/roc_pr_test.png)
 
@@ -117,8 +118,8 @@ Przewaga black-boxa jest **umiarkowana**: istotna na valid, ale na teście przed
 **Ustawienia:** SHAP w log-szansach. Karta - wzór zamknięty φ_j = β_j·(WoE_j − E[WoE_j]), tło: train. XGBoost - `TreeExplainer`,
 wariant **interventional** z tłem 300 firm z train - ta sama (interwencyjna) funkcja wartości co wzór zamknięty karty (wykład 4);
 przy 219 parach cech z |ρ| > 0,9 `tree_path_dependent` przybliżałby funkcję warunkową z dużym błędem. Wariant path-dependent
-stosujemy tylko do wartości interakcji SHAP (6.4). Kolumny one-hot sumowane do cechy źródłowej. Addytywność: maks. błąd 4·10⁻⁶
-(XGBoost), 9·10⁻¹⁶ (karta). Wartość bazowa φ₀: −2,374 (XGBoost), −2,215 (karta) - σ(φ₀) nie jest średnim PD (14,8%).
+stosujemy tylko do wartości interakcji SHAP (6.4). Kolumny one-hot sumowane do cechy źródłowej. Addytywność: maks. błąd 5·10⁻⁶
+(XGBoost), 2·10⁻¹⁵ (karta). Wartość bazowa φ₀: −2,562 (XGBoost), −2,215 (karta) - σ(φ₀) nie jest średnim PD (14,8%).
 
 ### 6.1 Wyjaśnienia globalne - najważniejsze cechy
 
@@ -127,20 +128,21 @@ stosujemy tylko do wartości interakcji SHAP (6.4). Kolumny one-hot sumowane do 
 | 1 | wsk_index_nowe (w karcie) | ↑ ryzyko | napływ nowych firm w branży - wysoka rotacja i konkurencja |
 | 2 | wsk_index_skr_zaw | ↑ ryzyko | odsetek skreśleń i zawieszeń w branży - kondycja branży w danym okresie |
 | 3 | pozostale_przychody_oper (w karcie) | ↓ ryzyko | dodatkowe źródła przychodu, aktywna działalność |
-| 4 | podatek_dochodowy (w karcie) | ↓ ryzyko | podatek płacą firmy z zyskiem - miara rentowności i skali |
-| 5 | Kapital_wlasny (w karcie) | ↓ ryzyko | bufor na straty |
-| 6 | wsk_zast_kapitalu_podstawowego | ↑ ryzyko | kapitał podstawowy względem własnego - wysoka wartość oznacza, że straty „zjadły” kapitał |
-| 7 | wsk_liczba_dni_istnienia | ↓ ryzyko (słaby) | staż firmy |
-| 8 | Aktywa | ↓ ryzyko | skala działalności |
-| 9 | wsk_stopa_zysku_sprzedaz (w karcie) | ↓ ryzyko | rentowność sprzedaży |
-| 10 | wsk_struktura_kap_wlasnego_s_2 | ↓ ryzyko | udział kapitału własnego w finansowaniu |
+| 4 | Kapital_wlasny (w karcie) | ↓ ryzyko | bufor na straty |
+| 5 | podatek_dochodowy (w karcie) | ↓ ryzyko | podatek płacą firmy z zyskiem - miara rentowności i skali |
+| 6 | wsk_liczba_dni_istnienia | ↓ ryzyko (słaby) | staż firmy |
+| 7 | wsk_zast_kapitalu_podstawowego | ↑ ryzyko | kapitał podstawowy względem własnego - wysoka wartość oznacza, że straty „zjadły” kapitał |
+| 8 | Kapital_zapasowy | ↓ ryzyko (słaby) | zatrzymane zyski z lat ubiegłych |
+| 9 | wsk_koszty_przychody | ↑ ryzyko | koszty względem przychodów - niska marża |
+| 10 | wsk_index_aktywne | ↑ ryzyko (słaby) | trzeci wskaźnik branżowy - dynamika aktywnych firm w branży |
 
 Kierunki (korelacja rang z default na train) są zgodne z intuicją ekonomiczną. **Spójność z kartą:** dwie najważniejsze cechy
 XGBoost to wskaźniki branżowe, a 4 z 5 pierwszych cech są w karcie. Po zgrupowaniu skorelowanych wskaźników w tematy oba modele
-opierają się na tych samych obszarach (branża, zadłużenie, kapitał, rentowność, zysk, przychody) - korelacja rang tematów 0,57.
-Ok. połowa (49%) wkładu XGBoost pochodzi z cech spoza tematów karty, w tym z `wsk_index_skr_zaw`, którego karta nie zawiera.
-Zgodność rankingu SHAP z ważnością permutacyjną dla 195 cech jest niska (ρ = 0,15) - permutacja pojedynczej cechy zaniża
-znaczenie cech mających skorelowanych „bliźniaków” (np. `Aktywa`, `wsk_stopa_zysku_sprzedaz`: wysoki SHAP, ujemna ważność permutacyjna).
+opierają się na tych samych obszarach (branża, zadłużenie, kapitał, rentowność, zysk, przychody) - korelacja rang tematów 0,62.
+Ok. połowa (54%) wkładu XGBoost pochodzi z cech spoza tematów karty, w tym z `wsk_index_skr_zaw` i `wsk_index_aktywne`, których karta
+nie zawiera. Zgodność rankingu SHAP z ważnością permutacyjną dla 195 cech jest niska (ρ = 0,14) - permutacja pojedynczej cechy zaniża
+znaczenie cech mających skorelowanych „bliźniaków” (np. `pozostale_przychody_oper`, `wsk_koszty_przychody`: 3. i 9. miejsce według SHAP,
+ujemna ważność permutacyjna).
 
 ![](wykresy/shap_waznosc.png)
 ![](wykresy/shap_beeswarm.png)
@@ -149,24 +151,24 @@ znaczenie cech mających skorelowanych „bliźniaków” (np. `Aktywa`, `wsk_st
 
 Tematy z 6.1 (grupy cech skorelowanych |ρ| ≥ 0,7 z cechą karty) oceniamy dwiema metodami z Lab 6: **permutacja grupowa** (cała grupa
 mieszana tą samą permutacją, valid, 5 powtórzeń) i **drop-column** (XGBoost uczony od nowa bez grupy). MDI pomijamy - jest liczone
-na danych uczących i premiuje cechy ciągłe. AUC black-boxa na valid: 0,824.
+na danych uczących i premiuje cechy ciągłe. AUC black-boxa na valid: 0,833.
 
 | Grupa (liczba cech) | Permutacja grupy (spadek AUC) | Suma permutacji pojedynczych | Drop-column grupy | Suma \|SHAP\| |
 |---|---|---|---|---|
-| pozostałe cechy (129) | 0,071 | 0,052 | 0,024 | 1,67 |
-| wsk_index_nowe (1) | 0,051 | 0,041 | 0,014 | 0,39 |
-| zadłużenie ogólne (17) | 0,034 | 0,001 | 0,004 | 0,40 |
-| kapitał własny (8) | 0,009 | 0,004 | −0,003 | 0,33 |
-| podatek dochodowy (2) | 0,004 | 0,003 | 0,002 | 0,13 |
-| zysk / zobowiązania (30) | 0,002 | 0,002 | −0,005 | 0,24 |
+| pozostałe cechy (129) | 0,080 | 0,061 | 0,026 | 2,07 |
+| wsk_index_nowe (1) | 0,050 | 0,040 | 0,009 | 0,43 |
+| zadłużenie ogólne (17) | 0,022 | 0,002 | 0,000 | 0,33 |
+| podatek dochodowy (2) | 0,005 | 0,003 | −0,002 | 0,14 |
+| zysk / zobowiązania (30) | 0,005 | 0,003 | 0,003 | 0,31 |
+| kapitał własny (8) | 0,002 | 0,002 | −0,002 | 0,31 |
 
-- **Efekt bliźniaków:** grupa zadłużenia ma permutację grupową 0,034 przy sumie permutacji pojedynczych 0,001 - model korzysta
-  z niej mocno, ale pojedyncza permutacja tego nie widzi, bo informację przenoszą pozostałe cechy grupy.
+- **Efekt bliźniaków:** grupa zadłużenia ma permutację grupową 0,022 przy sumie permutacji pojedynczych 0,002 - model korzysta
+  z niej wyraźnie, ale pojedyncza permutacja tego nie widzi, bo informację przenoszą pozostałe cechy grupy.
 - **Drop-column** jest bliski zera lub ujemny dla większości grup: po usunięciu grupy model odtwarza informację z innych cech
   (permutacja mierzy „czy model korzysta”, drop-column - „czy informację da się zastąpić”). Tylko wskaźnik branżowy i reszta cech
   są nie do zastąpienia (wyraźnie dodatni drop-column).
-- Zgodność rang grup: permutacja grupowa vs suma |SHAP| ρ = 0,90, permutacja vs drop-column ρ = 0,68. Na poziomie grup SHAP
-  i permutacja są zgodne - rozbieżność z 6.1 wynika z korelacji cech, nie z błędu metod.
+- Zgodność rang grup: permutacja grupowa vs suma |SHAP| ρ = 0,70, permutacja vs drop-column ρ = 0,92. Na poziomie grup SHAP
+  i permutacja są dużo bardziej zgodne niż dla pojedynczych cech (ρ = 0,14) - rozbieżność z 6.1 wynika z korelacji cech, nie z błędu metod.
 
 ### 6.3 PDP / ICE / ALE
 
@@ -175,13 +177,14 @@ na danych uczących i premiuje cechy ciągłe. AUC black-boxa na valid: 0,824.
 
 - Kierunki PDP obu modeli są zgodne dla czterech głównych cech (`wsk_index_nowe`, `wsk_index_skr_zaw`, podatek, zadłużenie);
   black-box ma krzywe nasycające się, karta - schodki.
-- **c-ICE:** wzrost `wsk_index_nowe` z 0,126 do 0,505 podnosi log-szanse średnio o +1,05 (10% firm < +0,79, 10% > +1,25); efekt jest
-  podobny w grupach wielkości (mikro +1,01, mała +1,06, pozostałe +1,07) - brak wyraźnej interakcji z wielkością.
-- **ALE** (K = 20 przedziałów kwantylowych, min. 20-28 firm w przedziale): różnica PDP - ALE to 2-5% zakresu efektu, mimo silnych
+- **c-ICE:** wzrost `wsk_index_nowe` z 0,126 do 0,505 podnosi log-szanse średnio o +1,25 (10% firm < +0,92, 10% > +1,56); efekt jest
+  podobny w grupach wielkości (mikro +1,24, mała +1,17, pozostałe +1,29) - brak wyraźnej interakcji z wielkością.
+- **ALE** (K = 20 przedziałów kwantylowych, min. 20-28 firm w przedziale): różnica PDP - ALE to 3-9% zakresu efektu, mimo silnych
   korelacji (dla zadłużenia ρ = 0,996 z innym wskaźnikiem). PDP nie jest więc tu istotnie zniekształcone przez korelacje.
-- **Monotoniczność XGBoost:** brak naruszeń dla `wsk_index_*`, podatku i zysku / zobowiązania; pomijalne dla kapitału (2,5% zmienności
-  PDP) i rentowności sprzedaży (5%); większe dla zadłużenia (13%), `wsk_sytuacji_fin` (25%) i `pozostale_przychody_oper` (26%, maks.
-  0,085 log-szans) - kandydaci do `monotone_constraints`. Znaki β karty są zgodne z oczekiwanymi kierunkami dla wszystkich 8 cech.
+- **Monotoniczność XGBoost:** brak naruszeń dla podatku i zysku / zobowiązania; pomijalne dla `wsk_index_*` (≤ 0,6% zmienności PDP),
+  kapitału (1,1%) i rentowności sprzedaży (2,2%); większe dla zadłużenia (6,7%), `wsk_sytuacji_fin` (25%) i `pozostale_przychody_oper`
+  (28%, maks. 0,099 log-szans) - kandydaci do `monotone_constraints`. Wiek firmy (`wsk_liczba_dni_istnienia`) w 83% zmienności PDP
+  idzie wbrew oczekiwanemu kierunkowi (maks. 0,086 log-szans). Znaki β karty są zgodne z oczekiwanymi kierunkami dla wszystkich 8 cech.
 
 ### 6.4 Interakcje: statystyka H Friedmana (Lab 6)
 
@@ -191,45 +194,46 @@ z **parą kontrolną** (dwie ważne cechy o najmniejszej interakcji SHAP) wyznac
 
 | Para | Interakcja SHAP | H (próba 1 / 2) | RMS log-szans (próba 1 / 2) |
 |---|---|---|---|
-| wsk_index_nowe × pozostale_przychody_oper | 0,021 | 0,047 / 0,049 | 0,022 / 0,022 |
-| wsk_index_skr_zaw × wsk_koszty_przychody | 0,011 | 0,030 / 0,029 | 0,013 / 0,012 |
-| wsk_index_skr_zaw × wielkosc | 0,011 | 0,025 / 0,025 | 0,011 / 0,011 |
-| wsk_index_skr_zaw × wsk_index_nowe | 0,013 | 0,015 / 0,018 | 0,012 / 0,013 |
-| kontrolna: pozostale_przychody_oper × Kapital_wlasny | 0,000 | 0,000 / 0,000 | 0,000 / 0,000 |
+| wsk_index_nowe × wsk_liczba_dni_istnienia | 0,028 | 0,061 / 0,060 | 0,033 / 0,030 |
+| wsk_index_nowe × podatek_dochodowy | 0,026 | 0,055 / 0,063 | 0,030 / 0,031 |
+| wsk_index_nowe × wsk_sytuacji_fin | 0,026 | 0,050 / 0,053 | 0,026 / 0,026 |
+| wsk_index_skr_zaw × pozostale_przychody_oper | 0,023 | 0,044 / 0,043 | 0,023 / 0,022 |
+| kontrolna: podatek_dochodowy × Kapital_zapasowy | 0,000 | 0,004 / 0,003 | 0,000 / 0,000 |
 
-Interakcje są **rzeczywiste** (powtarzalne na obu próbach, wyraźnie powyżej pary kontrolnej), ale **słabe**: H < 0,05, czyli
-interakcja odpowiada za kilka procent wspólnej zmienności pary, a RMS ≤ 0,022 log-szans. Model jest w praktyce prawie addytywny -
-to wspiera wybór addytywnej karty scoringowej.
+Interakcje są **rzeczywiste** (powtarzalne na obu próbach, ponad 10 razy powyżej pary kontrolnej, której H = 0,003-0,004 wyznacza
+poziom szumu metody), ale **słabe**: H ≤ 0,063, a udział interakcji w zmienności wspólnej funkcji zależności pary to H², czyli
+najwyżej ok. 0,4% (przy H ≈ 0,06); RMS ≤ 0,033 log-szans. Model jest w praktyce prawie addytywny - to wspiera wybór addytywnej
+karty scoringowej.
 
 ### 6.5 Global surrogate: drzewo naśladujące black-box (Lab 6)
 
 Drzewo regresyjne uczone na log-szansach XGBoost w train (min. 50 firm w liściu), PD drzewa przechodzi ten sam łańcuch kalibracji
-i δ. Wierność na teście (37 firm odrzuconych przez XGBoost przy progu operacyjnym z sekcji 8):
+i δ. Wierność na teście (39 firm odrzuconych przez XGBoost przy jego progu operacyjnym z sekcji 8):
 
 | Głębokość | Liście | Wierność R² | Zgodność decyzji | Odrzuceni przez XGBoost odrzuceni też przez drzewo | Zgodność klas | Gini drzewa |
 |---|---|---|---|---|---|---|
-| 2 | 4 | 0,559 | 93,8% | 0% | 41,2% | 0,370 |
-| 3 | 8 | 0,669 | 95,3% | 59,5% | 42,2% | 0,482 |
-| 4 | 15 | 0,760 | 96,3% | 43,2% | 52,1% | 0,529 |
-| 5 | 21 | 0,795 | 96,3% | 43,2% | 54,4% | 0,548 |
-| 8 | 29 | 0,805 | 96,3% | 43,2% | 54,4% | 0,556 |
+| 2 | 4 | 0,525 | 93,5% | 0% | 41,2% | 0,350 |
+| 3 | 8 | 0,631 | 95,0% | 35,9% | 39,9% | 0,426 |
+| 4 | 16 | 0,700 | 94,7% | 20,5% | 42,6% | 0,489 |
+| 5 | 22 | 0,733 | 94,7% | 20,5% | 49,1% | 0,493 |
+| 8 | 28 | 0,737 | 94,7% | 20,5% | 47,7% | 0,473 |
 
 ![](wykresy/surogat.png)
 
-- Drzewo o głębokości 3 dzieli najpierw według `wsk_index_nowe` (≤ 0,282), potem według podatku dochodowego / zysku brutto,
-  `wsk_index_skr_zaw` i struktury kapitału obcego; PD modelu końcowego w liściach 0,4-16,5%.
-- Wysoka **zgodność decyzji ogółem (94-96%) jest myląca** - większość firm jest przyjmowana. Drzewo odtwarza tylko 43-60%
-  odrzuceń black-boxa, a klasy ratingowe zgadzają się dla ok. połowy firm. Surogat nadaje się do komunikacji (reguły dla komitetu),
-  nie do decyzji ani jako wyjaśnienie pojedynczej odmowy. Nawet drzewo o 29 liściach (Gini 0,556) nie dorównuje karcie (0,562).
+- Drzewo o głębokości 3 dzieli najpierw według `wsk_index_nowe` (≤ 0,282), potem według podatku dochodowego (2,3-3,8 tys. zł),
+  `wsk_index_skr_zaw` (ok. 0,25) i mnożnika kapitału własnego (`wsk_mnoznik_kap_wl` 5,33); PD modelu końcowego w liściach 0,5-25,3%.
+- Wysoka **zgodność decyzji ogółem (94-95%) jest myląca** - większość firm jest przyjmowana. Drzewo odtwarza tylko 21-36%
+  odrzuceń black-boxa, a klasy ratingowe zgadzają się dla 40-49% firm. Surogat nadaje się do komunikacji (reguły dla komitetu),
+  nie do decyzji ani jako wyjaśnienie pojedynczej odmowy. Nawet najlepsze drzewo (Gini 0,493) nie dorównuje karcie (0,562).
 
 ### 6.6 Wyjaśnienia lokalne - studia przypadków (test)
 
 | Przypadek | PD XGBoost | PD karta | Default | Główne czynniki (SHAP / karta) |
 |---|---|---|---|---|
-| najwyższe PD | 71,8% | 68,2% | tak | wysokie wskaźniki branżowe (`wsk_index_nowe` 0,46, `wsk_index_skr_zaw` 0,48), kapitał własny 12,6 tys. zł, zadłużenie 94,5% aktywów, brak zysku (zerowy podatek) |
-| **graniczna** (PD ≈ p* = 18,2%) | 18,2% | 22,6% | nie | ↑ `wsk_index_nowe`, `wsk_zast_kapitalu_podstawowego` = 60, zerowy podatek; ↓ niski `wsk_index_skr_zaw` (0,20) |
-| typowa przyjęta | 8,3% | 8,6% | nie | ↑ wskaźniki branżowe, strata na sprzedaży; ↓ podatek, pozostałe przychody, kapitał (1,86 mln zł) |
-| niezgodność modeli | 16,3% | 3,4% | tak | XGBoost: wysoki `wsk_index_skr_zaw` (+0,52 log-szans; brak w karcie) i mały kapitał; karta: niski `wsk_index_nowe` daje 94,9 pkt (prawie maksimum) |
+| najwyższe PD | 80,3% | 68,2% | nie | wysokie wskaźniki branżowe (`wsk_index_nowe` 0,47: +0,73, `wsk_index_skr_zaw` 0,35: +0,53), kapitał własny 4,3 tys. zł (+0,31), ujemna ROE brutto, zadłużenie 98,2% aktywów; karta: dodatkowo brak zysku (zerowy podatek) |
+| **graniczna** (PD ≈ p* = 18,2%) | 18,2% | 17,9% | nie | ↑ `wsk_index_nowe` 0,30 (+0,42), wiek firmy (+0,16), `wsk_index_skr_zaw` 0,29 (+0,14), niski podatek (362 zł, +0,13), `wsk_zast_kapitalu_podstawowego` = 50 (+0,10) |
+| typowa przyjęta | 7,2% | 9,1% | nie | ↓ niski `wsk_index_skr_zaw` 0,17 (−0,67), pozostałe przychody 24,9 tys. zł (−0,16); ↑ `wsk_zast_kapitalu_podstawowego` = 1 000 (+0,34), zerowy podatek (+0,14) |
+| niezgodność modeli | 22,5% | 3,4% | tak | XGBoost: wysoki `wsk_index_skr_zaw` 0,44 (+0,69 log-szans; brak w karcie) i mały kapitał (28,4 tys. zł, +0,27); karta: niski `wsk_index_nowe` (0,20) daje 94,9 pkt (maksimum) |
 
 Dla karty wyjaśnienie jest bezpośrednie: punkty każdej cechy i „utracone punkty względem maksimum” (kody przyczyn). Dla XGBoost:
 wykres kaskadowy SHAP, kody przyczyn, LIME i analiza „what-if”. **Wniosek operacyjny:** firmy z dużą różnicą ocen obu modeli
@@ -239,34 +243,38 @@ wykres kaskadowy SHAP, kody przyczyn, LIME i analiza „what-if”. **Wniosek op
 ![](wykresy/lime_przypadki.png)
 
 ### 6.7 Wierność wyjaśnień (fidelity)
-- **SHAP - test usuwania:** zastąpienie wartością typową najważniejszej według SHAP cechy zmienia log-szanse średnio o 0,56, losowej -
-  o 0,015; dla 10 cech: 0,87 vs 0,10. Ranking SHAP wiernie wskazuje cechy, od których zależy prognoza.
+- **SHAP - test usuwania:** zastąpienie wartością typową najważniejszej według SHAP cechy zmienia log-szanse średnio o 0,65, losowej -
+  o 0,020; dla 10 cech: 0,99 vs 0,12. Ranking SHAP wiernie wskazuje cechy, od których zależy prognoza.
 - **LIME - lokalne R² i błąd aproksymacji** (20 firm, nowe otoczenie losowane jak w LIME):
 
 | Szerokość jądra | R² LIME (mediana) | R² ważone, nowe otoczenie | MAE (pp PD) | \|PD lokalne − PD modelu\| w punkcie (pp) |
 |---|---|---|---|---|
-| 0,25 × domyślna | 0,02 | −1,46 | 9,1 | 0,06 |
-| 0,5 × domyślna | 0,54 | 0,54 | 4,3 | 6,5 |
-| 1 × domyślna | 0,56 | 0,56 | 4,3 | 7,3 |
-| 2 × domyślna | 0,56 | 0,56 | 4,3 | 7,4 |
+| 0,25 × domyślna | 0,02 | −2,77 | 9,0 | 0,07 |
+| 0,5 × domyślna | 0,46 | 0,47 | 3,9 | 7,6 |
+| 1 × domyślna | 0,47 | 0,49 | 3,9 | 8,6 |
+| 2 × domyślna | 0,48 | 0,48 | 3,9 | 8,6 |
 
-Liniowy model zastępczy wyjaśnia ok. połowy zmienności PD XGBoost w otoczeniu firmy, ale w samym punkcie myli się średnio o ok. 7 pp.
-Węższe jądro poprawia zgodność w punkcie kosztem przeuczenia. **Wyjaśnienia LIME mogą być niepełne lub mylące** - zwłaszcza blisko
-progu decyzyjnego; przyczyną jest schodkowy model w 195 wymiarach. LIME i SHAP wskazują częściowo różne cechy (Jaccard top-5 0,43-1,0;
-wśród wspólnych cech kierunek zgodny tylko w 3-4 przypadkach z 6-7).
+Liniowy model zastępczy wyjaśnia ok. połowy zmienności PD XGBoost w otoczeniu firmy, ale w samym punkcie myli się średnio o ok. 8-9 pp.
+LIME losuje próbki z odchyleniem standardowym całego train w każdej z ok. 195 cech, więc otoczenie jest szerokie - próbki leżą daleko
+od firmy. W tylu wymiarach odległości próbek od firmy są prawie jednakowe, więc wagi jądra są prawie płaskie i szerokość jądra
+(0,5-2 × domyślna) prawie nic nie zmienia; przy 0,25 × domyślnej istotną wagę ma za mało próbek - zgodność w punkcie jest pozorna,
+a R² na nowym otoczeniu ujemne. **Wyjaśnienia LIME mogą być niepełne lub mylące** - zwłaszcza blisko progu decyzyjnego; przyczyną
+jest też schodkowy model w 195 wymiarach. Wkład cechy w LIME liczymy jako współczynnik × standaryzowana wartość firmy (względem
+średniej z train), więc - jak SHAP - względem przeciętnej firmy. LIME i SHAP wskazują częściowo różne cechy (Jaccard top-5 0,25-0,67),
+ale wśród wspólnych cech kierunek wpływu w większości się zgadza (8 / 8, 3 / 4, 5 / 6, 4 / 5).
 
 ### 6.8 Stabilność wyjaśnień
 | Eksperyment | Miara | Wynik | Źródło zmienności |
 |---|---|---|---|
-| LIME, 10 ziaren, ta sama firma: 1 000 / 5 000 / 20 000 próbek | Jaccard top-5 | 0,56-0,79 / 0,70-1,00 / 0,77-1,00 | metoda (losowanie) |
-| | Spearman wag | 0,71-0,77 / 0,84-0,94 / 0,95-0,98 | |
-| SHAP XGBoost, model uczony na 5 foldach | Jaccard top-5 / top-10 | 0,46 / 0,57; ρ rang 0,77 | model (wybór skorelowanych cech) |
-| SHAP XGBoost, grupy tematyczne | Jaccard top-3 | 1,00; ρ rang 0,91 | model |
+| LIME, 10 ziaren, ta sama firma: 1 000 / 5 000 / 20 000 próbek | Jaccard top-5 | 0,49-0,58 / 0,56-0,83 / 0,80-1,00 | metoda (losowanie) |
+| | Spearman wag | 0,57-0,75 / 0,76-0,93 / 0,93-0,97 | |
+| SHAP XGBoost, model uczony na 5 foldach | Jaccard top-5 / top-10 | 0,58 / 0,61; ρ rang 0,78 | model (wybór skorelowanych cech) |
+| SHAP XGBoost, grupy tematyczne | Jaccard top-3 | 0,70; ρ rang 0,90 | model |
 | Karta, 5 foldów | Jaccard top-3 | 0,60; ρ rang 0,83; znaki β 39/40 | model (mało defaultów) |
 
-LIME stabilizuje się przy ≥ 5 000 próbek, ale stabilność nie oznacza wierności. TreeSHAP jest deterministyczny - zmienność
-rankingu wynika z modelu: przy 190 skorelowanych wskaźnikach boosting w każdym foldzie wybiera inne „bliźniacze” cechy, ale
-ranking **grup** jest w pełni stabilny. Dlatego monitoring wyjaśnień prowadzimy na poziomie grup (sekcja 10).
+LIME stabilizuje się dopiero przy 20 000 próbek, a stabilność nie oznacza wierności. TreeSHAP jest deterministyczny - zmienność
+rankingu wynika z modelu: przy 190 skorelowanych wskaźnikach boosting w każdym foldzie wybiera inne „bliźniacze” cechy, a ranking
+**grup** jest stabilniejszy (ρ rang 0,90 wobec 0,78 dla cech). Dlatego monitoring wyjaśnień prowadzimy na poziomie grup (sekcja 10).
 **Ograniczenia SHAP / LIME:** podział wkładu między skorelowane cechy jest umowny (zależy od wariantu SHAP i struktury drzew),
 a wyjaśnienia opisują model, nie zależności przyczynowe.
 
@@ -276,31 +284,35 @@ a wyjaśnienia opisują model, nie zależności przyczynowe.
 | Valid (przed) | DR | średnie PD | Brier | log-loss | ECE | CITL a | slope b |
 |---|---|---|---|---|---|---|---|
 | karta | 14,8% | 13,5% | 0,1031 | 0,340 | 0,029 | 0,13 | 1,06 |
-| XGBoost | 14,8% | 13,4% | 0,1009 | 0,328 | 0,017 | 0,14 | 1,14 |
+| XGBoost | 14,8% | 12,8% | 0,1000 | 0,324 | 0,024 | 0,21 | 1,04 |
 
 Wybór metody - 5-krotna CV wewnątrz valid (log-loss): karta - bez kalibracji 0,3402, Platt 0,3444, beta 0,3447, izotoniczna 0,4002;
-XGBoost - 0,3275 / 0,3306 / 0,3318 / 0,3741. **Kształt jest poprawny** (modele bez wag klas), izotoniczna przeucza się przy 89
-defaultach → bez korekty kształtu. Na teście Platt i beta przestrzeliwują średnią (PD 16,2-16,4% przy DR 14,9%, CITL −0,13 do −0,15)
+XGBoost - 0,3240 / 0,3274 / 0,3280 / 0,3496. **Kształt jest poprawny** (modele bez wag klas), izotoniczna przeucza się przy 89
+defaultach → bez korekty kształtu. Na teście Platt i beta przestrzeliwują średnią (PD 16,2-16,3% przy DR 14,9%, CITL −0,13 do −0,15)
 i pogarszają log-loss - potwierdzenie decyzji.
 
 ![](wykresy/kalibracja_przed.png)
 ![](wykresy/kalibracja_metody.png)
 
 ### 7.2 Dostosowanie do tendencji centralnej 4%
-logit(q) = logit(p) + δ, δ wyznaczone na valid (populacja referencyjna): **−1,486** (karta), **−1,488** (XGBoost).
+logit(q) = logit(p) + δ, δ wyznaczone na valid przeważonym do DR = 4% (portfel docelowy; wagi: default 0,04 / DR, brak defaultu
+0,96 / (1 − DR)) tak, by średnie PD wyniosło tam 4%: **−1,280** (karta), **−1,218** (XGBoost). Wzór korekty a priori
+(logit 4% − logit DR próby) dałby −1,430 - silniejsze przesunięcie, bo na valid oba modele już lekko zaniżają poziom (CITL 0,13 / 0,21).
+Na valid bez wag średnie PD po δ wynosi 4,8% (karta) i 5,0% (XGBoost).
 
 | Test | średnie PD | DR | AUC | Brier | log-loss | CITL a | slope b |
 |---|---|---|---|---|---|---|---|
 | karta - przed δ | 14,7% | 14,9% | 0,781 | 0,105 | 0,350 | 0,02 | 0,95 |
-| karta - po δ (4%) | 4,4% | 14,9% | 0,781 | 0,124 | 0,441 | 1,50 | 0,95 |
-| XGBoost - przed δ | 14,7% | 14,9% | 0,793 | 0,102 | 0,341 | 0,01 | 0,95 |
-| XGBoost - po δ (4%) | 4,6% | 14,9% | 0,793 | 0,121 | 0,430 | 1,50 | 0,95 |
-| karta - po δ, test przeważony do DR 4% | 3,7% | 4,0% | - | 0,036 | 0,145 | 0,07 | 0,97 |
-| XGBoost - po δ, test przeważony do DR 4% | 3,8% | 4,0% | - | 0,035 | 0,142 | 0,07 | 0,98 |
+| karta - po δ (4%) | 5,3% | 14,9% | 0,781 | 0,121 | 0,420 | 1,30 | 0,95 |
+| XGBoost - przed δ | 14,1% | 14,9% | 0,792 | 0,104 | 0,347 | 0,07 | 0,83 |
+| XGBoost - po δ (4%) | 5,7% | 14,9% | 0,792 | 0,117 | 0,413 | 1,29 | 0,83 |
+| karta - po δ, test przeważony do DR 4% | 4,5% | 4,0% | - | 0,036 | 0,146 | −0,13 | 0,97 |
+| XGBoost - po δ, test przeważony do DR 4% | 4,6% | 4,0% | - | 0,036 | 0,145 | −0,17 | 0,85 |
 
 - Ranking i AUC się nie zmieniają; zmienia się poziom PD. Względem próby (DR 14,9%) kalibracja **pogarsza się z założenia**:
   dostosowanie średniej do 4% nie jest poprawą kalibracji statystycznej.
-- Po przeważeniu testu do DR = 4% (zmiana tylko udziału defaultów) PD po δ jest dobrze skalibrowane (CITL 0,07; bez δ: −1,41).
+- Po przeważeniu testu do DR = 4% (zmiana tylko udziału defaultów) PD po δ jest bliskie skalibrowania: średnie PD 4,5% / 4,6% przy
+  DR 4,0%, CITL −0,13 / −0,17 - lekkie zawyżenie (bez δ: −1,41 / −1,38).
   Dostosowanie jest więc poprawne, jeśli portfel docelowy różni się od próby tylko udziałem defaultów (np. próba celowo wzbogacona
   o upadłe firmy). Jeśli wysoki DR wynika z gorszego okresu, PD po δ zaniża ryzyko w podobnych okresach - to cecha PD through-the-cycle.
 
@@ -309,104 +321,116 @@ logit(q) = logit(p) + δ, δ wyznaczone na valid (populacja referencyjna): **−
 ## 8. Progi decyzyjne i ratingi
 
 **Skala:** AAA < 1%, AA 1-2%, A 2-5%, BBB 5-8%, BB 8-12%, B 12-20%, CCC ≥ 20%, D - stwierdzony default.
-Rozkład (karta / XGBoost, test): AAA 27,5% / 30,6%, AA 20,0% / 19,5%, A 25,4% / 22,9%, BBB 8,5% / 10,5%, BB-CCC 18,5% / 16,5%; HHI 0,20 / 0,20.
-**Monotoniczność:** DR karty rośnie od 4,8% (AAA) do 68,8% (CCC); w XGBoost jedno odwrócenie A / BBB (16,1% vs 11,1%, 63 firmy w BBB).
-**Backtest (test Jeffreysa i dokładny test dwumianowy):** przed δ - karta: 6 klas zielonych, AAA żółta; XGBoost: wszystkie zielone.
-Po δ 6 z 7 klas czerwonych w obu modelach; test dwumianowy daje nieco wyższe p-value (np. BBB karty 0,046 vs 0,028), ale te same
-wnioski. Czerwone światła wynikają wyłącznie z kotwicy 4% wobec DR testu 14,9%.
+Rozkład (karta / XGBoost, test ważony do DR 4%): AAA 23,5% / 34,4%, AA 20,9% / 16,4%, A 25,9% / 21,5%, BBB 11,7% / 9,8%,
+BB-CCC 17,9% / 18,0%; HHI 0,19 / 0,21.
+**Monotoniczność (test ważony do DR 4%):** DR karty rośnie od 0,8% (AAA) do 32,3% (CCC); w XGBoost DR nie jest monotoniczny -
+A 4,6%, BBB 3,7%, BB 3,3% (8 i 5 defaultów w klasach BBB i BB).
+**Backtest (test Jeffreysa, test ważony do DR 4%, PD po δ):** wszystkie 7 klas zielonych w obu modelach. Dla porównania test bez wag
+z PD bez δ: karta - 7 klas zielonych, XGBoost - 5 zielonych, 1 żółta, 1 czerwona.
 
 ![](wykresy/backtest.png)
 
 **Funkcja zysku** (marża 10%, LGD 45%, jednakowa ekspozycja): przyjęty dobry +0,10, przyjęty zły −0,45, odrzucony 0;
-p* = 0,10 / 0,55 = 18,2%. **Próg empiryczny wyznaczamy na valid przeważonym do DR = 4%** (wykład 3: najpierw δ, potem próg) - tylko
-wtedy PD po δ jest skalibrowane względem portfela, na którym liczymy zysk. Wynik: **16,5% (karta), 16,0% (XGBoost)** - blisko p*.
+p* = 0,10 / 0,55 = 18,2%. **Próg empiryczny wyznaczamy na valid przeważonym do DR = 4%** (wykład 3: najpierw δ, potem próg) - na tym
+portfelu wyznaczono δ, więc na nim liczymy zysk. Wynik: **15,0% (karta), 20,5% (XGBoost)** - po obu stronach p*.
 
 | Test | Próg | Akceptacja | DR wśród przyjętych | Zysk |
 |---|---|---|---|---|
-| karta - portfel 4%, próg z valid | 16,5% | 97,9% | 3,4% | 47,5 |
-| XGBoost - portfel 4%, próg z valid | 16,0% | 96,6% | 3,0% | 48,4 |
-| portfel 4%, p* (karta / XGBoost) | 18,2% | 98,6% / 97,4% | 3,6% / 3,2% | 47,5 / 48,1 |
+| karta - portfel 4%, próg z valid | 15,0% | 93,9% | 2,8% | 47,5 |
+| XGBoost - portfel 4%, próg z valid | 20,5% | 96,5% | 2,9% | 48,6 |
+| portfel 4%, p* (karta / XGBoost) | 18,2% | 97,4% / 94,8% | 3,4% / 2,7% | 47,5 / 48,2 |
 | portfel 4%, przyjmij wszystkich | - | 100% | 4,0% | 46,7 |
-| portfel jak próba, p* na PD bez δ (karta / XGBoost) | 18,2% | 72,5% / 71,3% | 7,8% / 7,5% | 24,7 / 25,1 |
+| portfel jak próba, p* na PD bez δ (karta / XGBoost) | 18,2% | 72,5% / 73,8% | 7,8% / 8,4% | 24,7 / 23,9 |
 | portfel jak próba, przyjmij wszystkich | - | 100% | 14,9% | 11,0 |
 
 Wyniki dla portfela 4% są ważone (test przeważony do DR 4%, suma wag 599). Próg empiryczny i p* dają prawie ten sam zysk -
-przy portfelu o DR 4% model odrzuca tylko 2-3,5% najgorszych firm, a krzywe zysku są płaskie wokół optimum.
-**Tabela decyzyjna (XGBoost, test bez wag):** obniżanie progu z 20% do 3% zmniejsza akceptację z 96,0% do 59,3%, a DR wśród przyjętych
-z 12,7% do 5,1%; liczba odrzuconych dobrych firm rośnie szybciej niż unikniętych złych (jeden uniknięty default „kosztuje” 4,5 dobrej firmy).
-**Porównanie decyzji (test, progi z valid):** zgodność decyzji 96,8%, ten sam rating 54,4%, różnica ≤ 1 klasa 91,8%; z 19 firm
-o różnej decyzji 17 odrzuca tylko XGBoost. Przy tej samej stopie akceptacji (93,8% / 96,3%) decyzje zgadzają się w 94,5% / 98,0%,
-a zysk różni się o 1,8 / 0 jednostek.
+przy portfelu o DR 4% model odrzuca tylko 3-6% najgorszych firm, a krzywe zysku są płaskie wokół optimum, więc położenie maksimum
+jest mało precyzyjne (progi 15,0% i 20,5%) i nie świadczy o kalibracji PD.
+**Tabela decyzyjna (karta, test bez wag, PD po δ):** obniżanie progu z 20% do 3% zmniejsza akceptację z 96,5% do 54,8%, a DR wśród
+przyjętych z 13,0% do 5,5%; liczba odrzuconych dobrych firm rośnie szybciej niż unikniętych złych (jeden uniknięty default „kosztuje”
+4,5 dobrej firmy): między progami 8% a 3% odrzucamy 20 złych firm więcej, ale 117 dobrych więcej. Na tym portfelu zysk jest najwyższy
+przy progu 8% (25,6), a przy progu operacyjnym 15,0% wynosi 21,95.
+**Porównanie decyzji (test, progi z valid):** zgodność decyzji 92,3%, ten sam rating 45,9%, różnica ≤ 1 klasa 88,5%; z 46 firm
+o różnej decyzji 31 odrzuca tylko karta (DR wśród nich 41,9%), 15 - tylko XGBoost. Przy tej samej stopie akceptacji (93,5% / 90,8%)
+decyzje zgadzają się w 93,8% / 92,3%, a zysk XGBoost jest wyższy o 2,7 / 1,65 jednostki.
 
 ![](wykresy/prog_zysk.png)
 
 ### 8.1 Firma graniczna przy progu operacyjnym: SHAP modelu końcowego
 
-Decyzję podejmujemy na PD po δ i progu 16,0%, więc firmę graniczną wybieramy właśnie tam (XGBoost). Kształtu nie kalibrujemy, a δ jest
-stałym przesunięciem logitu, więc **SHAP modelu końcowego = te same wkłady φ, wartość bazowa φ₀ + δ** (wykład 4); kontrola:
-φ₀ + δ + Σφ = −1,665 = logit PD końcowego.
+Modelem końcowym jest karta scoringowa (sekcja 11), a decyzję podejmujemy na jej PD po δ i progu 15,0%, więc firmę graniczną wybieramy
+właśnie tam. Kształtu nie kalibrujemy, a δ jest stałym przesunięciem logitu, więc **SHAP modelu końcowego = te same wkłady φ karty,
+wartość bazowa φ₀ + δ = −3,495** (wykład 4); kontrola: φ₀ + δ + Σφ = −1,736 = logit PD końcowego.
 
-Firma (wiersz testu 431): PD końcowe 15,9% (tuż poniżej progu - przyjęta), rating B, bez defaultu. Ryzyko podnoszą przede wszystkim
-wskaźniki branżowe (`wsk_index_nowe` +0,71, `wsk_index_skr_zaw` +0,53 log-szans), dalej mały kapitał własny (31 tys. zł, +0,21),
-`wsk_zast_kapitalu_podstawowego` = 50 (+0,12), pozostałe przychody (+0,12) i zerowy podatek (+0,11). Decyzja zależy więc w dużej mierze
-od kondycji branży, na którą firma nie ma wpływu - ważna informacja dla analityka.
+Firma (wiersz testu 318): PD końcowe 14,99% (tuż poniżej progu - przyjęta), rating B, bez defaultu (XGBoost: PD po δ 12,9%).
+Najwięcej punktów firma traci na wskaźniku branżowym (`wsk_index_nowe` 0,45: 41,1 pkt, 53,9 pkt mniej od maksimum, SHAP +1,11
+log-szans), dalej na zerowym podatku (26,7 pkt utraconych, +0,28) i małym kapitale własnym (20 tys. zł; 18,4 pkt, +0,26); ryzyko
+obniża tylko zadłużenie ogólne (−0,16). Wskaźnik branżowy daje ok. 63% sumy wkładów (+1,11 z +1,76), więc decyzja zależy w dużej
+mierze od kondycji branży, na którą firma nie ma wpływu - ważna informacja dla analityka.
 
 ![](wykresy/waterfall_graniczna_4proc.png)
 
 ## 9. Analiza kontrfaktyczna
 
-Firma z testu w klasie **BB w obu modelach** (jedna z 14 takich; wiersz 582, PD po δ 9,7% w XGBoost, 11,9% w karcie, bez defaultu):
-kapitał własny 7,6 tys. zł, zadłużenie ogólne 81%, zerowy podatek, ujemna rentowność sprzedaży.
+Firma z testu w klasie **BB w obu modelach** (jedna z 14 takich; wiersz 574, PD po δ 10,0% w XGBoost, 8,5% w karcie, bez defaultu):
+kapitał własny 231 tys. zł, zerowy podatek i zerowy wskaźnik zysku do zobowiązań, silnie ujemna rentowność sprzedaży (−15,4).
 **Zależności między cechami:** zamiast zmieniać jeden wskaźnik, przesuwamy **dźwignie** - grupy cech skorelowanych |ρ| ≥ 0,7
 z cechą karty - o tę samą liczbę percentyli rozkładu z train. Niezmienne: sekcja PKD, forma własności, wielkość, wiek oraz
-wskaźniki branżowe `wsk_index_*` (firma nie ma na nie wpływu).
+wskaźniki branżowe `wsk_index_*` (firma nie ma na nie wpływu). Podatek dochodowy nie jest dźwignią - jest skutkiem wyniku
+finansowego, a nie decyzją firmy; przy dźwigni zysku rośnie o 19% (CIT) przyrostu dodatniego zysku brutto.
 
-- **XGBoost:** najtańsze pojedyncze dźwignie (koszt 10 percentyli) - podatek dochodowy → PD 7,8%, rating **BBB**, albo zadłużenie
-  ogólne → PD 7,3%, BBB; dalej kapitał własny (15 percentyli, PD 7,6%) i rentowność sprzedaży (20 percentyli, PD 7,4%).
-  Dźwignia podatku w kwotach: zysk brutto z −9,7 tys. zł do 0, podatek z 0 do ok. 2,0 tys. zł - przesunięcie percentylowe
-  nie zachowuje dokładnie relacji księgowych, więc kwoty są przybliżone.
-- **Karta:** brakuje 12,6 pkt (502 → 515, PD < 8%); przejście zadłużenia ogólnego do niższego przedziału (z 0,71-0,85 do < 0,71)
-  daje +13,2 pkt i samo wystarcza; podatek o dwa przedziały w górę daje +16,5 pkt. **Oba modele wskazują zadłużenie** jako
-  skuteczną dźwignię.
-- **Porównanie z wyjaśnieniami:** największe sumy SHAP tej firmy mają dźwignie kapitału (+0,52) i zadłużenia (+0,50) - zadłużenie
-  jest też jednym z dwóch najtańszych kontrfaktów; podatek ma mniejszy SHAP (+0,16), ale skok z zera jest „tani” w percentylach. LIME przypisuje
-  cechom dźwigni wagi bliskie zera (−0,02 do +0,01) - niska wierność LIME.
-- **Realność i ograniczenia:** odległość kontrfaktu do najbliższej firmy z train 0,586 wobec mediany 0,490 i 90. percentyla 0,653
-  dla firm testowych - kontrfakt jest nietypowy, ale w zakresie rzeczywistych firm. Kontrfakt opisuje model, nie przyczynowość;
-  nie uwzględnia kosztu i wykonalności zmiany.
+- **XGBoost:** jedyna pojedyncza dźwignia, która wystarcza (w zakresie do 80 percentyli), to zysk / zobowiązania (31 cech, m.in. zysk
+  netto i brutto, marże, ROA): przesunięcie o 10 percentyli → PD 7,7%, rating **BBB**. Pary z tą dźwignią po 10 percentyli są droższe
+  (PD 7,4-7,7%), pary bez niej wymagają po 25 percentyli; pozostałe dźwignie same nie wystarczają. W kwotach: zysk brutto z 0
+  do ok. 20,4 tys. zł, podatek do ok. 3,9 tys. zł, zysk netto do ok. 16,7 tys. zł (wariant `Zysk_netto`: 19,2 tys. zł) -
+  przesunięcie percentylowe zachowuje relacje księgowe tylko w przybliżeniu.
+- **Karta:** brakuje 1,7 pkt (519 → 521, PD < 8%); wystarcza każde z przejść do sąsiedniego przedziału: kapitał własny powyżej
+  1,685 mln zł (+8,4 pkt), rentowność sprzedaży z < −8,79 do [−8,79; −0,44) (+2,8 pkt) albo zysk / zobowiązania z [0; 0,046)
+  do [0,046; 0,163) (+1,8 pkt); pozostałe przychody o jeden przedział dają tylko +0,6 pkt. **Oba modele wskazują zysk względem
+  zobowiązań** jako skuteczną dźwignię; w karcie, przy firmie tuż nad granicą klasy, wystarcza najmniejsza zmiana.
+- **Porównanie z wyjaśnieniami:** największe sumy SHAP tej firmy mają dźwignie rentowności sprzedaży (+0,11) i zysku / zobowiązań
+  (+0,07) - ta druga daje najtańszy kontrfakt; kapitał (+0,05) i pozostałe przychody (+0,03) podnoszą ryzyko słabo, a zadłużenie
+  (−0,02) i sytuacja finansowa (−0,08) je obniżają. Ranking SHAP nie jest więc rankingiem najtańszych zmian. LIME przypisuje cechom
+  dźwigni wkłady bliskie zera (0 do +0,01 PD) - nie wskazuje tych dźwigni.
+- **Realność i ograniczenia:** odległość kontrfaktu do najbliższej firmy z train (rangi 20 najważniejszych cech) 0,534 wobec mediany
+  0,555 i 90. percentyla 0,717 dla firm testowych - kontrfakt leży w obszarze rzeczywistych firm, ale nie dowodzi to jego spójności
+  księgowej (np. dwa warianty zysku netto się rozchodzą). Kontrfakt opisuje model, nie przyczynowość; nie uwzględnia kosztu i wykonalności zmiany.
 
 ## 10. Audyt podgrup i monitoring
 
 | Segment (test) | n | defaulty | DR | DR / PD karta | DR / PD XGBoost | AUC XGBoost |
 |---|---|---|---|---|---|---|
-| mikro | 174 | 23 | 13,2% | 0,76 | 0,77 | 0,87 |
-| mała | 100 | 14 | 14,0% | 1,08 | 1,22 | 0,78 |
-| pozostałe | 325 | 52 | 16,0% | 1,17 | 1,11 | 0,78 |
-| forma F215 / F216 | 58 / 58 | 12 / 13 | 20,7% / 22,4% | 1,10 / 1,83 | 1,12 / 1,95 | 0,80 / 0,67 |
-| sekcja C (przetwórstwo) | 82 | 14 | 17,1% | 1,69 | 1,72 | 0,66 |
+| mikro | 174 | 23 | 13,2% | 0,76 | 0,80 | 0,87 |
+| mała | 100 | 14 | 14,0% | 1,08 | 1,37 | 0,78 |
+| pozostałe | 325 | 52 | 16,0% | 1,17 | 1,14 | 0,78 |
+| forma F215 / F216 | 58 / 58 | 12 / 13 | 20,7% / 22,4% | 1,10 / 1,83 | 1,19 / 1,98 | 0,80 / 0,68 |
+| sekcja C (przetwórstwo) | 82 | 14 | 17,1% | 1,69 | 1,85 | 0,70 |
 
 Ryzyko firm mikro jest zawyżane, a formy F216 i sekcji C - zaniżane (przy 13-14 defaultach różnice mogą być przypadkowe);
-forma F215 jest teraz skalibrowana. Kandydat do korekty segmentowej na większej próbie. Dane nie zawierają cech osób fizycznych.
+dla firm małych XGBoost zaniża ryzyko bardziej niż karta (1,37 vs 1,08), a forma F215 mieści się w granicach losowości (1,10-1,19).
+Kandydat do korekty segmentowej na większej próbie. Dane nie zawierają cech osób fizycznych.
 PSI train → test < 0,05 dla wyniku obu modeli, wszystkich cech karty, `wsk_index_skr_zaw` i cech kategorycznych.
 
-**Monitoring wyjaśnień:** ranking pojedynczych cech SHAP jest niestabilny nawet bez zmiany populacji (Jaccard top-5 0,46 między
-foldami), więc alarm oparty na Jaccard top-5 byłby fałszywy. Monitorujemy **względną zmianę średniego |SHAP| grup tematycznych**
-(ranking grup stabilny: Jaccard top-3 1,00) względem walidacji oraz znaki β karty. Pełny plan monitoringu - w `MODEL_CARD.md`.
+**Monitoring wyjaśnień:** ranking pojedynczych cech SHAP jest niestabilny nawet bez zmiany populacji (Jaccard top-5 0,58 między
+foldami, min. 0,43), więc alarm oparty na Jaccard top-5 byłby fałszywy. Monitorujemy **względną zmianę średniego |SHAP| grup
+tematycznych** (ranking grup stabilniejszy: ρ rang 0,90, Jaccard top-3 0,70) względem walidacji oraz znaki β karty. Pełny plan
+monitoringu - w `MODEL_CARD.md`.
 
 ## 11. Porównanie modeli i rekomendacja
 
 | Kryterium | Karta scoringowa | XGBoost |
 |---|---|---|
-| Skuteczność | Gini 0,562 | Gini 0,586 (różnica +0,024 [−0,032; +0,083] na teście; +0,055 [+0,008; +0,099] na valid) |
-| Złożoność | 8 cech, 9 parametrów | 158 cech, 500 drzew |
+| Skuteczność | Gini 0,562 | Gini 0,583 (różnica +0,021 [−0,048; +0,089] na teście; +0,072 [+0,019; +0,120] na valid) |
+| Złożoność | 8 cech, 9 parametrów | 179 cech, 800 drzew |
 | Interpretowalność | bezpośrednia (punkty, WoE, znaki β) | pośrednia (SHAP, PDP / ALE, LIME, surogat) |
-| Wiarygodność wyjaśnień | dokładne, stabilne (Jaccard top-3 0,60) | SHAP wierny, ale ranking cech niestabilny (0,46; grupy stabilne); LIME mało wierny; surogat odtwarza 43-60% odrzuceń |
-| Kalibracja | dobra przed δ; δ = −1,486 | dobra przed δ; δ = −1,488 |
-| Decyzje (próg z valid) | zysk 47,5 (portfel 4%), 16,5 (test bez wag) | zysk 48,4 (portfel 4%), 21,0 (test bez wag); przy równej akceptacji - podobne |
+| Wiarygodność wyjaśnień | dokładne, stabilne (Jaccard top-3 0,60) | SHAP wierny, ale ranking cech niestabilny (0,58; grupy stabilniejsze, ρ 0,90); LIME mało wierny; surogat odtwarza 21-36% odrzuceń |
+| Kalibracja | dobra przed δ; δ = −1,280 | dobra przed δ; δ = −1,218 |
+| Decyzje (próg z valid) | zysk 47,5 (portfel 4%), 21,95 (test bez wag) | zysk 48,6 (portfel 4%), 21,9 (test bez wag); przy równej akceptacji o 1,65-2,7 wyższy |
 
-**Czy poprawa jakości black-boxa uzasadnia utratę bezpośredniej interpretowalności? Nie.** Przewaga XGBoost (+0,02 Gini na teście,
-+0,05 na valid) jest umiarkowana i na teście mieści się w niepewności statystycznej; oba modele opierają się na tych samych obszarach
-(z wskaźnikami branżowymi na czele), model jest prawie addytywny (słabe interakcje, H < 0,05), a wyjaśnienia black-boxa na poziomie
+**Czy poprawa jakości black-boxa uzasadnia utratę bezpośredniej interpretowalności? Nie.** Przewaga XGBoost jest mała i niepewna:
+na teście +0,02 Gini, w granicach niepewności statystycznej (przedział obejmuje zero), na valid +0,07 i istotna. Rekomendacja opiera się
+więc na interpretowalności i stabilności: oba modele opierają się na tych samych obszarach (z wskaźnikami branżowymi na czele),
+model jest prawie addytywny (słabe interakcje, H ≤ 0,06), karta jest dokładnie wyjaśnialna, a wyjaśnienia black-boxa na poziomie
 cech są mniej stabilne i - w przypadku LIME - mało wierne. **Rekomendacja:** karta scoringowa jako model ratingowy, XGBoost jako
 *challenger* do monitoringu i wskazywania firm o rozbieżnych ocenach.
 
@@ -414,7 +438,7 @@ cech są mniej stabilne i - w przypadku LIME - mało wierne. **Rekomendacja:** k
 - wskaźniki branżowe `wsk_index_*` wymagają aktualizacji dla każdego okresu, a firma nie ma na nie wpływu (decyzja i rating zależą
   częściowo od kondycji branży);
 - selekcja cech karty (IV, filtr korelacji) liczona na całym train - wybór liczby cech w CV jest więc nieco optymistyczny;
-- brak ograniczeń monotonicznych w XGBoost (naruszenia do 26% zmienności PDP dla dwóch cech);
+- brak ograniczeń monotonicznych w XGBoost (naruszenia do 28% zmienności PDP dla dwóch cech finansowych, 83% dla wieku firmy);
 - ALE bez pasma bootstrap - niepewność krzywych nie jest oceniona;
 - heurystyczny podział grupowy (brak identyfikatora firmy), brak ekspozycji i daty oceny;
 - kotwica 4% przy DR próby 14,8% - PD po δ jest skalibrowane tylko dla portfela różniącego się udziałem defaultów;
