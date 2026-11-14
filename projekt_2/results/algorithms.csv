@@ -1,6 +1,6 @@
 algorytm,RMSE struktura,RMSE wszystko
-Ridge,1041.5,880.7
-Random Forest,877.4,812.6
-HistGradientBoosting,819.8,770.0
-XGBoost,755.5,746.9
-LightGBM,845.0,770.1
+Ridge,933.2,765.0
+Random Forest,771.5,675.5
+HistGradientBoosting,752.4,637.5
+XGBoost,733.7,600.3
+LightGBM,740.3,637.1
