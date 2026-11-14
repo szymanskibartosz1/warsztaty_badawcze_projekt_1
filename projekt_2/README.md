@@ -14,9 +14,9 @@ jupyter notebook projekt2_olx.ipynb
 Kroki korzystające z OpenAI API (embeddingi OpenAI, ekstrakcja cech przez gpt-4.1-mini, wycena przez LLM)
 zostały uruchomione raz, a odpowiedzi są w `cache/` i `results/llm_direct_*.csv`. Notebook tylko je wczytuje.
 
-## Wyniki (zbiór testowy, 1188 ogłoszeń)
+## Wyniki (zbiór testowy, 1214 ogłoszeń)
 - `results/results.csv` – porównanie podejść (LightGBM na różnych zestawach cech, LLM bezpośrednio)
 - `results/algorithms.csv` – porównanie algorytmów (Ridge, Random Forest, HistGB, XGBoost, LightGBM)
 
-Baseline (LightGBM, cechy strukturalne): RMSE 618 zł/m².
-Najlepszy model (struktura + cechy LLM + TF-IDF + embeddingi): RMSE 549 zł/m² (−11,1%).
+Baseline (LightGBM, cechy strukturalne): RMSE 845 zł/m².
+Najlepszy model (struktura + cechy LLM): RMSE 741 zł/m² (−12,3%).
