@@ -4,12 +4,12 @@
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "nieruchomość",
+   "kategoria": "mieszkanie",
    "platforma": "Otodom",
-   "tytul": "Jasny salon z jadalnią i dużymi przeszkleniami",
-   "opis": "Na zdjęciu widać jasną przestrzeń dzienną z częścią wypoczynkową i jadalnianą. Duże przeszklenia z roletami zapewniają dostęp światła dziennego. Wnętrze jest umeblowane, a widoczne wyposażenie obejmuje stół z krzesłami, regał i szafkę. To funkcjonalna aranżacja dla osób szukających mieszkania z wygodną strefą wspólną.",
+   "tytul": "Jasne mieszkanie z dużymi przeszkleniami i jadalnią",
+   "opis": "Sprzedam jasne mieszkanie z dużymi przeszkleniami i nowoczesnym wnętrzem. W części dziennej urządzono jadalnię ze szklanym stołem i krzesłami. W pomieszczeniu znajdują się także meble do przechowywania oraz rolety w oknach. Wnętrze jest umeblowane i utrzymane w jasnej kolorystyce. To propozycja dla osób szukających mieszkania z wygodną przestrzenią do wspólnego spędzania czasu.",
    "parametry": {
-    "rodzaj": "do uzupełnienia",
+    "rodzaj": "mieszkanie",
     "liczba pokoi": "do uzupełnienia",
     "metraż": "do uzupełnienia",
     "piętro": "do uzupełnienia",
@@ -17,7 +17,6 @@
     "umeblowanie": "umeblowane"
    },
    "do_uzupelnienia": [
-    "rodzaj nieruchomości",
     "liczba pokoi",
     "metraż",
     "piętro",
@@ -25,9 +24,9 @@
     "lokalizacja"
    ]
   },
-  "seconds": 7.6,
-  "input_tokens": 1366,
-  "output_tokens": 753
+  "seconds": 7.5,
+  "input_tokens": 1458,
+  "output_tokens": 709
  },
  {
   "zdjecie": "1_salon.jpg",
@@ -36,46 +35,15 @@
   "listing": {
    "kategoria": "Nieruchomość",
    "platforma": "Otodom",
-   "tytul": "Nieruchomość z dużymi oknami i miejscem do jedzenia",
-   "opis": "Na zdjęciu widoczne jest wykończone pomieszczenie z miejscem do jedzenia. Duże okna wyposażono w białe rolety. W pomieszczeniu znajdują się szklany stół, krzesła i regał. Przestrzeń może zainteresować osoby szukające miejsca do spożywania posiłków przy oknie.",
+   "tytul": "Nieruchomość z jasną jadalnią i dużymi oknami",
+   "opis": "Oferuję na sprzedaż nieruchomość z jasną jadalnią. Duże okna wpuszczają do wnętrza dużo światła. W jadalni znajduje się okrągły szklany stół z krzesłami oraz regał. To propozycja dla osób szukających przestrzeni z miejscem do wspólnych posiłków.",
    "parametry": {
     "rodzaj": "do uzupełnienia",
     "liczba pokoi": "do uzupełnienia",
     "metraż": "do uzupełnienia",
     "piętro": "do uzupełnienia",
-    "stan wykończenia": "widoczne pomieszczenie wykończone",
-    "umeblowanie": "widoczne pomieszczenie umeblowane"
-   },
-   "do_uzupelnienia": [
-    "rodzaj nieruchomości",
-    "lokalizacja",
-    "liczba pokoi",
-    "metraż",
-    "piętro",
-    "stan wykończenia pozostałych pomieszczeń",
-    "zakres umeblowania pozostającego w nieruchomości"
-   ]
-  },
-  "seconds": 8.9,
-  "input_tokens": 1366,
-  "output_tokens": 565
- },
- {
-  "zdjecie": "1_salon.jpg",
-  "model": "gpt-6.2-sol",
-  "tytul_wejsciowy": "",
-  "listing": {
-   "kategoria": "Nieruchomości",
-   "platforma": "Otodom",
-   "tytul": "Nieruchomość z jasną jadalnią i dużymi przeszkleniami",
-   "opis": "Na sprzedaż nieruchomość z jasną częścią jadalnianą. Duże przeszklenia na dwóch ścianach wpuszczają dużo światła dziennego, a jasne osłony okienne je rozpraszają. Widoczne wnętrze jest wykończone i zaaranżowane z okrągłym stołem oraz plecionymi krzesłami. To propozycja dla osób, które cenią naturalne światło i miejsce do wspólnych posiłków.",
-   "parametry": {
-    "rodzaj": "do uzupełnienia",
-    "liczba pokoi": "do uzupełnienia",
-    "metraż": "do uzupełnienia",
-    "piętro": "do uzupełnienia",
-    "stan wykończenia": "widoczna część jadalniana wykończona",
-    "umeblowanie": "do uzupełnienia"
+    "stan wykończenia": "do uzupełnienia",
+    "umeblowanie": "umeblowana jadalnia"
    },
    "do_uzupelnienia": [
     "Rodzaj nieruchomości",
@@ -83,13 +51,44 @@
     "Liczba pokoi",
     "Metraż",
     "Piętro",
-    "Stan wykończenia pozostałych pomieszczeń",
-    "Informacja o tym, które meble pozostają w nieruchomości"
+    "Stan wykończenia całej nieruchomości",
+    "Zakres umeblowania pozostającego w nieruchomości",
+    "Forma własności"
    ]
   },
-  "seconds": 7.3,
-  "input_tokens": 1366,
-  "output_tokens": 353
+  "seconds": 8.3,
+  "input_tokens": 1458,
+  "output_tokens": 498
+ },
+ {
+  "zdjecie": "1_salon.jpg",
+  "model": "gpt-6.2-sol",
+  "tytul_wejsciowy": "",
+  "listing": {
+   "kategoria": "Nieruchomości – mieszkanie na sprzedaż",
+   "platforma": "Otodom",
+   "tytul": "Jasne mieszkanie z dużymi oknami i częścią jadalnianą",
+   "opis": "Sprzedam mieszkanie z jasną częścią jadalnianą. Duże, narożne przeszklenia wpuszczają dużo dziennego światła, a jasne rolety pozwalają je rozproszyć. W części jadalnianej stoi okrągły stół ze szklanym blatem i plecionymi krzesłami. To propozycja dla osób, które cenią dobrze doświetlone wnętrza i miejsce na wspólne posiłki.",
+   "parametry": {
+    "rodzaj": "mieszkanie",
+    "liczba pokoi": "do uzupełnienia",
+    "metraż": "do uzupełnienia",
+    "piętro": "do uzupełnienia",
+    "stan wykończenia": "do uzupełnienia",
+    "umeblowanie": "do uzupełnienia"
+   },
+   "do_uzupelnienia": [
+    "Lokalizacja mieszkania",
+    "Metraż i liczba pokoi",
+    "Piętro",
+    "Stan wykończenia całego mieszkania",
+    "Zakres umeblowania i wyposażenia wliczonego w sprzedaż",
+    "Informacja o przynależności balkonu lub tarasu"
+   ]
+  },
+  "seconds": 6.5,
+  "input_tokens": 1458,
+  "output_tokens": 342
  },
  {
   "zdjecie": "1_salon.jpg",
@@ -98,64 +97,67 @@
   "listing": {
    "kategoria": "mieszkanie",
    "platforma": "Otodom",
-   "tytul": "Nowoczesne mieszkanie 2-pokojowe, duże okna, widok na miasto",
-   "opis": "Oferuję nowoczesne mieszkanie z dużymi przeszkleniami, które zapewniają doskonałe doświetlenie wnętrza. Mieszkanie jest umeblowane, z estetycznymi dodatkami i funkcjonalnym rozkładem. Idealne dla osób ceniących jasne i przestronne wnętrza oraz dogodną lokalizację w mieście. Na podłogach znajduje się nowoczesne, jasne wykończenie, a wnętrze jest gotowe do zamieszkania. Polecam szczególnie dla singli lub par.",
+   "tytul": "Nowoczesne mieszkanie 2-pokojowe z dużymi oknami, jasne i przestronne",
+   "opis": "Oferuję na sprzedaż nowoczesne mieszkanie o funkcjonalnym układzie. Lokal jest jasny i przestronny dzięki dużym oknom z roletami. W mieszkaniu znajduje się przytulna jadalnia z szklanym stołem oraz meble zapewniające wygodę. Idealne dla osób ceniących dobry dostęp światła dziennego oraz nowoczesny wystrój. Mieszkanie może świetnie spełnić funkcję miejsca do relaksu i pracy zdalnej.",
    "parametry": {
     "rodzaj": "mieszkanie",
-    "liczba_pokoi": 2,
-    "metraz": "do uzupełnienia",
+    "liczba pokoi": "2",
+    "metraż": "do uzupełnienia",
     "piętro": "do uzupełnienia",
-    "stan_wykończenia": "gotowe do zamieszkania",
-    "umeblowanie": "tak"
+    "stan wykończenia": "nowoczesne, wykończone",
+    "umeblowanie": "częściowe"
    },
    "do_uzupelnienia": [
-    "metraż mieszkania",
-    "piętro"
+    "dokładny metraż mieszkania",
+    "piętro",
+    "lokalizacja (dzielnica, miasto)",
+    "rok budowy",
+    "informacje o ogrzewaniu",
+    "dodatkowe wyposażenie i udogodnienia"
    ]
   },
-  "seconds": 3.5,
-  "input_tokens": 1690,
-  "output_tokens": 262
+  "seconds": 3.9,
+  "input_tokens": 1782,
+  "output_tokens": 299
  },
  {
   "zdjecie": "2_kuchnia.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "Mebel – półka kuchenna",
+   "kategoria": "Meble – półka kuchenna",
    "platforma": "OLX",
-   "tytul": "Drewniana wisząca półka kuchenna z kilkoma poziomami",
-   "opis": "Drewniana, wisząca półka kuchenna z kilkoma poziomami do przechowywania naczyń i akcesoriów. Ma otwartą konstrukcję oraz widoczne boki i półki w brązowym odcieniu. Na zdjęciu wygląda na używaną, bez widocznych uszkodzeń. Sprawdzi się w kuchni lub jadalni, szczególnie tam, gdzie przydatne jest dodatkowe miejsce na przechowywanie.",
+   "tytul": "Drewniana półka kuchenna z kilkoma poziomami i haczykami",
+   "opis": "Sprzedam wiszącą półkę kuchenną w ciepłym, brązowym kolorze. Ma kilka poziomów do przechowywania oraz haczyki na kubki. Sprawdzi się w kuchni, domowej kawiarni lub lokalu. To praktyczny sposób na uporządkowanie naczyń i wykorzystanie miejsca na ścianie.",
    "parametry": {
-    "kategoria": "Meble kuchenne – półka wisząca",
+    "kategoria": "Półka kuchenna",
     "marka": "do uzupełnienia",
-    "materiał": "drewno (wygląd na zdjęciu)",
-    "kolor": "brązowy",
-    "stan": "używany; widoczny stan dobry"
+    "materiał": "Drewno",
+    "kolor": "Brązowy",
+    "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "wymiary",
-    "marka lub informacja o braku marki",
-    "dokładny materiał",
-    "informacja, czy półka jest sprzedawana z widocznymi na zdjęciu akcesoriami",
-    "stan techniczny i sposób montażu"
+    "Wymiary półki",
+    "Stan i ewentualne ślady użytkowania",
+    "Marka, jeśli jest znana",
+    "Informacja, czy półka jest sprzedawana z widocznymi na niej przedmiotami"
    ]
   },
-  "seconds": 6.8,
-  "input_tokens": 1289,
-  "output_tokens": 607
+  "seconds": 5.9,
+  "input_tokens": 1381,
+  "output_tokens": 516
  },
  {
   "zdjecie": "2_kuchnia.jpg",
   "model": "gpt-6.1-terra",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "Meble",
+   "kategoria": "Meble - półki i regały",
    "platforma": "OLX",
-   "tytul": "Drewniana półka kuchenna na ścianę z wieszakami",
-   "opis": "Wisząca półka kuchenna wykonana z drewna w brązowym kolorze. Ma trzy poziomy oraz wieszaki na kubki. Listwy z przodu półek pomagają utrzymać ustawione na nich przedmioty. Sprawdzi się do przechowywania naczyń i szklanych butelek w kuchni. Stan półki oraz zakres sprzedaży są do uzupełnienia.",
+   "tytul": "Drewniana półka kuchenna wisząca z haczykami",
+   "opis": "Sprzedam drewnianą półkę kuchenną do zawieszenia na ścianie. Mebel ma trzy poziomy z przednimi listwami. Pod dolną półką znajdują się haczyki na kubki. Brązowe drewno nadaje jej klasyczny wygląd. Sprawdzi się w kuchni do przechowywania naczyń i akcesoriów.",
    "parametry": {
-    "kategoria": "Meble kuchenne",
+    "kategoria": "Meble - półki i regały",
     "marka": "do uzupełnienia",
     "materiał": "drewno",
     "kolor": "brązowy",
@@ -165,40 +167,40 @@
     "Marka",
     "Stan",
     "Wymiary",
-    "Informacja, czy akcesoria widoczne na zdjęciu są częścią sprzedaży"
+    "Informacja, czy akcesoria i naczynia są częścią oferty"
    ]
   },
-  "seconds": 6.8,
-  "input_tokens": 1289,
-  "output_tokens": 335
+  "seconds": 7.9,
+  "input_tokens": 1381,
+  "output_tokens": 416
  },
  {
   "zdjecie": "2_kuchnia.jpg",
   "model": "gpt-6.2-sol",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "Meble – regały i półki",
+   "kategoria": "Meble",
    "platforma": "OLX",
-   "tytul": "Drewniany regał kuchenny wiszący z uchwytami na kubki",
-   "opis": "Sprzedam drewniany regał kuchenny do zawieszenia na ścianie. Ma trzy otwarte półki z listwami z przodu oraz uchwyty na kubki pod dolną półką. Na zdjęciu nie widać większych uszkodzeń, ale dokładny stan jest do potwierdzenia. Sprawdzi się w kuchni, w której brakuje miejsca na blacie na kubki, szkło i przyprawy.",
+   "tytul": "Drewniany regał kuchenny wiszący z haczykami na kubki",
+   "opis": "Sprzedam drewniany regał kuchenny w ciepłym, brązowym kolorze. Ma trzy otwarte półki z listwami z przodu, które pomagają utrzymać naczynia na miejscu. Pod dolną półką znajduje się pięć drewnianych haczyków na kubki. Regał sprawdzi się w kuchni, w której chcesz mieć szklanki i kubki pod ręką, bez zajmowania miejsca na blacie.",
    "parametry": {
-    "kategoria": "Regały i półki",
+    "kategoria": "Meble – regały i półki",
     "marka": "do uzupełnienia",
     "materiał": "drewno",
     "kolor": "brązowy",
     "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "marka lub producent",
-    "wymiary regału",
-    "dokładny stan i ewentualne ślady użytkowania",
-    "sposób mocowania i informacja, czy elementy montażowe są w zestawie",
-    "informacja, czy oferta obejmuje wyłącznie regał"
+    "Marka lub informacja, że regał jest bez marki",
+    "Stan i ewentualne ślady użytkowania",
+    "Wymiary: szerokość, wysokość i głębokość",
+    "Sposób mocowania i informacja, czy elementy montażowe są w zestawie",
+    "Informacja, czy sprzedaż obejmuje dodatkowe akcesoria"
    ]
   },
   "seconds": 5.9,
-  "input_tokens": 1289,
-  "output_tokens": 312
+  "input_tokens": 1381,
+  "output_tokens": 326
  },
  {
   "zdjecie": "2_kuchnia.jpg",
@@ -207,82 +209,83 @@
   "listing": {
    "kategoria": "meble kuchenne",
    "platforma": "OLX",
-   "tytul": "Drewniana półka kuchenna na szklanki i kubki",
-   "opis": "Oferuję solidną drewnianą półkę kuchenną, idealną do przechowywania szklanek, kubków oraz drobnych akcesoriów kuchennych. Wystarczy ją powiesić na ścianie, aby zaoszczędzić miejsce i mieć wszystko pod ręką. Półka jest w dobrym stanie, estetyczna i funkcjonalna. Sprawdzi się w każdej kuchni, która potrzebuje praktycznego i stylowego uzupełnienia wyposażenia.",
+   "tytul": "Drewniana półka kuchenna na filiżanki i szkło",
+   "opis": "Oferuję drewnianą półkę kuchenną idealną do przechowywania filiżanek, szklanek i drobnych akcesoriów kuchennych. Półka wykonana z naturalnego drewna, z uchwytami na kubki oraz kilkoma poziomami na naczynia i ozdoby. Pasuje do wnętrz utrzymanych w stylu rustykalnym lub klasycznym, dokładnie wykończona. Świetne rozwiązanie dla osób, które chcą uporządkować kuchnię i mieć pod ręką najczęściej używane naczynia. Prosta w montażu i trwała konstrukcja.",
    "parametry": {
-    "kategoria": "meble kuchenne",
     "materiał": "drewno",
-    "kolor": "brązowy",
+    "typ": "półka ścienna",
+    "kolor": "naturalne drewno",
     "stan": "dobry"
    },
    "do_uzupelnienia": [
     "wymiary półki",
-    "rodzaj mocowania"
+    "informacje o możliwości montażu",
+    "dokładny stan techniczny"
    ]
   },
-  "seconds": 4.2,
-  "input_tokens": 1586,
-  "output_tokens": 218
+  "seconds": 3.2,
+  "input_tokens": 1678,
+  "output_tokens": 267
  },
  {
   "zdjecie": "3_golf.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "samochód osobowy",
+   "kategoria": "samochód",
    "platforma": "Otomoto",
-   "tytul": "Volkswagen Golf III, biały hatchback",
-   "opis": "Na zdjęciu Volkswagen Golf III w białym kolorze, z nadwoziem typu hatchback. Auto jest pokazane na ekspozycji; na podstawie zdjęcia nie można ocenić jego stanu technicznego. Klasyczna stylistyka i kompaktowe nadwozie mogą zainteresować miłośników starszych modeli Volkswagena. Szczegóły dotyczące rocznika, przebiegu i wyposażenia wymagają uzupełnienia.",
+   "tytul": "Volkswagen Golf, biały hatchback 5-drzwiowy",
+   "opis": "Sprzedam Volkswagena Golfa w białym kolorze, z nadwoziem hatchback i pięcioma drzwiami. Samochód ma klasyczną, prostą stylistykę oraz czarne zderzaki i listwy boczne. Kompaktowe nadwozie sprawdzi się w mieście i podczas codziennych dojazdów. To propozycja dla osób szukających popularnego samochodu marki Volkswagen.",
    "parametry": {
     "marka": "Volkswagen",
-    "model": "Golf III",
+    "model": "Golf",
     "rocznik": "do uzupełnienia",
-    "typ nadwozia": "hatchback",
+    "typ nadwozia": "hatchback, 5-drzwiowy",
     "kolor": "biały",
     "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
     "rocznik",
-    "przebieg",
     "stan techniczny i wizualny",
+    "przebieg",
     "pojemność i rodzaj silnika",
-    "skrzynia biegów",
-    "wyposażenie"
+    "skrzynia biegów"
    ]
   },
-  "seconds": 4.9,
-  "input_tokens": 1289,
-  "output_tokens": 456
+  "seconds": 6.1,
+  "input_tokens": 1381,
+  "output_tokens": 593
  },
  {
   "zdjecie": "3_golf.jpg",
   "model": "gpt-6.1-terra",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "Samochód osobowy",
+   "kategoria": "samochód osobowy",
    "platforma": "Otomoto",
-   "tytul": "Volkswagen Golf III hatchback biały",
-   "opis": "Volkswagen Golf III z nadwoziem typu hatchback. Samochód ma białe nadwozie, czarne zderzaki i listwy boczne. Stan techniczny oraz szczegóły dotyczące eksploatacji są do uzupełnienia. Auto może zainteresować osoby poszukujące kompaktowego Volkswagena.",
+   "tytul": "Volkswagen Golf III, biały hatchback 3-drzwiowy",
+   "opis": "Sprzedam Volkswagena Golfa III w białym kolorze. To trzydrzwiowy hatchback o zwartej sylwetce. Samochód ma stalowe felgi, czarne zderzaki i listwy boczne. Propozycja dla osób szukających klasycznego modelu Volkswagena.",
    "parametry": {
     "marka": "Volkswagen",
     "model": "Golf III",
     "rocznik": "do uzupełnienia",
-    "typ nadwozia": "hatchback",
+    "typ nadwozia": "hatchback, 3-drzwiowy",
     "kolor": "biały",
     "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "rocznik",
-    "stan techniczny i historia pojazdu",
-    "przebieg",
-    "rodzaj paliwa i pojemność silnika",
-    "skrzynia biegów",
-    "wyposażenie"
+    "Rok produkcji",
+    "Stan pojazdu",
+    "Przebieg",
+    "Silnik i rodzaj paliwa",
+    "Skrzynia biegów",
+    "Wyposażenie",
+    "Historia pojazdu"
    ]
   },
-  "seconds": 6.8,
-  "input_tokens": 1289,
-  "output_tokens": 448
+  "seconds": 7.1,
+  "input_tokens": 1381,
+  "output_tokens": 447
  },
  {
   "zdjecie": "3_golf.jpg",
@@ -291,12 +294,11 @@
   "listing": {
    "kategoria": "Samochody osobowe",
    "platforma": "Otomoto",
-   "tytul": "Volkswagen Golf III – 3-drzwiowy hatchback",
-   "opis": "Na sprzedaż Volkswagen Golf III w wersji 3-drzwiowej. Jasnosrebrne nadwozie kontrastuje z czarnymi listwami bocznymi i czarną częścią przedniego zderzaka. Na widocznych fragmentach karoserii nie widać większych wgnieceń, ale stan techniczny pozostaje do uzupełnienia. To propozycja dla osób szukających kompaktowego Volkswagena z lat 90.",
+   "tytul": "Volkswagen Golf III – 3-drzwiowy hatchback, srebrny",
+   "opis": "Sprzedam Volkswagena Golfa III w wersji 3-drzwiowej. To kompaktowy hatchback w jasnosrebrnym kolorze. Czarne listwy boczne i elementy zderzaków kontrastują z jasnym nadwoziem. To propozycja dla miłośników klasycznych Volkswagenów z lat 90.",
    "parametry": {
     "marka": "Volkswagen",
-    "model": "Golf",
-    "generacja": "III",
+    "model": "Golf III",
     "rocznik": "do uzupełnienia",
     "typ nadwozia": "Hatchback",
     "liczba drzwi": "3",
@@ -305,44 +307,47 @@
    },
    "do_uzupelnienia": [
     "Rok produkcji",
-    "Stan techniczny, w tym ewentualne usterki",
     "Przebieg",
-    "Wersja silnikowa i rodzaj paliwa",
-    "Rodzaj skrzyni biegów"
+    "Pojemność i moc silnika",
+    "Rodzaj paliwa",
+    "Rodzaj skrzyni biegów",
+    "Stan techniczny i blacharsko-lakierniczy",
+    "Wersja wyposażenia"
    ]
   },
-  "seconds": 6.0,
-  "input_tokens": 1289,
-  "output_tokens": 320
+  "seconds": 7.4,
+  "input_tokens": 1381,
+  "output_tokens": 346
  },
  {
   "zdjecie": "3_golf.jpg",
   "model": "gpt-4.1-mini",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "samochód osobowy",
+   "kategoria": "samochód",
    "platforma": "Otomoto",
-   "tytul": "Volkswagen Golf III 3d hatchback srebrny stan do uzupełnienia",
-   "opis": "Na sprzedaż Volkswagen Golf III w wersji trzydrzwiowej, kolor srebrny. Samochód utrzymany w dobrym stanie wizualnym. Klasyczny model ceniony za niezawodność i ekonomię użytkowania. Idealny dla osób szukających solidnego, miejskiego auta. Stan techniczny oraz wyposażenie do uzupełnienia przez sprzedającego.",
+   "tytul": "Volkswagen Golf III hatchback srebrny, 3-drzwiowy",
+   "opis": "Na sprzedaż Volkswagen Golf III w kolorze srebrnym. Samochód ma 3-drzwiowe nadwozie typu hatchback, idealny jako pojazd miejski lub dla osób ceniących klasyczne modele. Auto jest w dobrym stanie wizualnym i technicznym, z zadbaną karoserią. Doskonała propozycja dla kolekcjonerów i miłośników marki Volkswagen.",
    "parametry": {
     "marka": "Volkswagen",
-    "model": "Golf",
-    "rok produkcji": "do uzupełnienia",
-    "typ nadwozia": "hatchback 3d",
+    "model": "Golf III",
+    "rocznik": "do uzupełnienia",
+    "typ nadwozia": "hatchback",
     "kolor": "srebrny",
-    "stan": "do uzupełnienia"
+    "stan": "dobry"
    },
    "do_uzupelnienia": [
-    "rok produkcji",
+    "rocznik",
     "przebieg",
-    "stan techniczny",
-    "wyposażenie",
-    "numer VIN"
+    "pojemność silnika",
+    "rodzaj paliwa",
+    "typ skrzyni biegów",
+    "wyposażenie dodatkowe"
    ]
   },
-  "seconds": 4.2,
-  "input_tokens": 1586,
-  "output_tokens": 231
+  "seconds": 3.2,
+  "input_tokens": 1678,
+  "output_tokens": 245
  },
  {
   "zdjecie": "4_sofa.jpg",
@@ -351,25 +356,24 @@
   "listing": {
    "kategoria": "Meble – sofa",
    "platforma": "OLX",
-   "tytul": "Czerwona sofa dwuosobowa tapicerowana",
-   "opis": "Czerwona sofa dwuosobowa z tapicerowanym siedziskiem i oparciem. Ma szerokie podłokietniki oraz widoczne metalowe nóżki. Sprawdzi się w salonie, pokoju lub mieszkaniu na wynajem. Materiał obicia i dokładny stan sofy należy uzupełnić.",
+   "tytul": "Czerwona sofa dwuosobowa z szerokimi podłokietnikami",
+   "opis": "Sprzedam czerwoną, dwuosobową sofę o prostej, nowoczesnej formie. Ma szerokie podłokietniki, materiałową tapicerkę i metalowe nóżki. Intensywny kolor będzie wyrazistym akcentem we wnętrzu. Sprawdzi się w salonie, pokoju gościnnym lub młodzieżowym.",
    "parametry": {
-    "kategoria": "Meble – sofy",
+    "kategoria": "Sofa",
     "marka": "do uzupełnienia",
-    "materiał": "do uzupełnienia",
-    "kolor": "czerwony",
+    "materiał": "Tapicerka materiałowa, nóżki metalowe",
+    "kolor": "Czerwony",
     "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "marka",
-    "materiał obicia",
-    "stan",
-    "wymiary"
+    "Marka",
+    "Stan",
+    "Wymiary"
    ]
   },
-  "seconds": 3.8,
-  "input_tokens": 1366,
-  "output_tokens": 330
+  "seconds": 5.2,
+  "input_tokens": 1458,
+  "output_tokens": 443
  },
  {
   "zdjecie": "4_sofa.jpg",
@@ -379,39 +383,11 @@
    "kategoria": "Meble - sofy i kanapy",
    "platforma": "OLX",
    "tytul": "Czerwona sofa tapicerowana z podłokietnikami",
-   "opis": "Na sprzedaż czerwona sofa tapicerowana. Ma szerokie podłokietniki, oparcie oraz nóżki. Na obiciu widoczne są zagniecenia. Sofa sprawdzi się jako mebel wypoczynkowy do salonu.",
+   "opis": "Sprzedam czerwoną sofę tapicerowaną. Mebel ma szerokie siedzisko, oparcie i dwa podłokietniki. Prosta forma i wyrazisty kolor mogą stanowić ciekawy akcent we wnętrzu. Sofa sprawdzi się w salonie, pokoju dziennym lub poczekalni.",
    "parametry": {
     "kategoria": "Sofy i kanapy",
     "marka": "do uzupełnienia",
-    "materiał": "tkanina, skład do uzupełnienia",
-    "kolor": "czerwony",
-    "stan": "do uzupełnienia"
-   },
-   "do_uzupelnienia": [
-    "marka",
-    "skład materiału",
-    "stan sofy",
-    "wymiary",
-    "funkcja spania"
-   ]
-  },
-  "seconds": 5.7,
-  "input_tokens": 1366,
-  "output_tokens": 282
- },
- {
-  "zdjecie": "4_sofa.jpg",
-  "model": "gpt-6.2-sol",
-  "tytul_wejsciowy": "",
-  "listing": {
-   "kategoria": "Meble – sofy i kanapy",
-   "platforma": "OLX",
-   "tytul": "Czerwona sofa z szerokimi podłokietnikami",
-   "opis": "Sprzedam czerwoną sofę z materiałowym obiciem. Ma szerokie podłokietniki i krótkie nóżki w srebrnym kolorze. Na siedzisku i z przodu widać zagniecenia tkaniny. Sprawdzi się w salonie lub pokoju dziennym jako wyrazisty akcent kolorystyczny.",
-   "parametry": {
-    "kategoria": "Meble – sofy i kanapy",
-    "marka": "do uzupełnienia",
-    "materiał": "tkanina (obicie)",
+    "materiał": "tkanina",
     "kolor": "czerwony",
     "stan": "do uzupełnienia"
    },
@@ -419,12 +395,40 @@
     "marka",
     "stan",
     "wymiary",
-    "informacja o funkcji spania"
+    "funkcja spania",
+    "możliwość transportu"
    ]
   },
-  "seconds": 5.9,
-  "input_tokens": 1366,
-  "output_tokens": 239
+  "seconds": 5.0,
+  "input_tokens": 1458,
+  "output_tokens": 194
+ },
+ {
+  "zdjecie": "4_sofa.jpg",
+  "model": "gpt-6.2-sol",
+  "tytul_wejsciowy": "",
+  "listing": {
+   "kategoria": "Meble",
+   "platforma": "OLX",
+   "tytul": "Czerwona sofa z szerokimi podłokietnikami",
+   "opis": "Sprzedam czerwoną sofę z tekstylnym obiciem. Ma szerokie podłokietniki po obu stronach i jednolite siedzisko. Sofa stoi na krótkich, srebrnych nóżkach. Sprawdzi się w salonie lub pokoju dziennym jako mocny akcent kolorystyczny.",
+   "parametry": {
+    "kategoria": "Sofy i kanapy",
+    "marka": "do uzupełnienia",
+    "materiał": "tkanina",
+    "kolor": "czerwony",
+    "stan": "do uzupełnienia"
+   },
+   "do_uzupelnienia": [
+    "Marka i model sofy",
+    "Stan sofy i ewentualne uszkodzenia",
+    "Wymiary: szerokość, głębokość i wysokość",
+    "Czy sofa jest rozkładana i czy ma pojemnik na pościel"
+   ]
+  },
+  "seconds": 5.1,
+  "input_tokens": 1458,
+  "output_tokens": 264
  },
  {
   "zdjecie": "4_sofa.jpg",
@@ -433,54 +437,49 @@
   "listing": {
    "kategoria": "meble",
    "platforma": "OLX",
-   "tytul": "Czerwona sofa trzyosobowa z metalowymi nogami",
-   "opis": "Oferuję trzyosobową sofę w intensywnie czerwonym kolorze. Sofa posiada proste, nowoczesne nóżki wykonane z metalu. Pokrycie materiałowe jest w dobrym stanie, lekko pofałdowane. Idealna do salonu, pokoju dziennego lub biura. Łatwo dopasowuje się do różnych aranżacji wnętrz.",
+   "tytul": "Czerwona sofa nowoczesna 3-osobowa",
+   "opis": "Sprzedam czerwoną sofę w nowoczesnym stylu. Trzyosobowa, wygodna i stabilna dzięki metalowym nogom. Idealna do salonu, biura lub pokoju młodzieżowego. Pokryta materiałowym pokrowcem w intensywnym czerwonym kolorze. Sofa jest w dobrym stanie, gotowa do natychmiastowego użytkowania.",
    "parametry": {
     "kategoria": "sofa",
     "kolor": "czerwony",
-    "material": "tkanina",
+    "materiał": "tkanina",
     "stan": "dobry"
    },
    "do_uzupelnienia": [
-    "wymiary sofy",
-    "czy sofa rozkładana",
-    "dokładny stan techniczny",
-    "marka lub producent"
+    "wymiary",
+    "informacje o możliwości rozkładania lub przechowywania"
    ]
   },
-  "seconds": 3.3,
-  "input_tokens": 1690,
-  "output_tokens": 202
+  "seconds": 2.8,
+  "input_tokens": 1782,
+  "output_tokens": 191
  },
  {
   "zdjecie": "5_motocykl.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "Motocykl – enduro",
+   "kategoria": "motocykl",
    "platforma": "Otomoto",
-   "tytul": "Czerwony motocykl enduro z kuframi i wysoką szybą",
-   "opis": "Na zdjęciu czerwony motocykl typu enduro z wysoką szybą, osłonami dłoni i bagażem zamocowanym przy tylnej części. Widoczne są szprychowe koła oraz terenowe opony. Motocykl jest używany; stan techniczny nie jest możliwy do oceny na podstawie zdjęcia. Wyposażenie i sylwetka mogą zainteresować osoby szukające motocykla do turystyki lub jazdy po mniej utwardzonych drogach.",
+   "tytul": "Honda enduro z wysoką szybą i sakwami bocznymi",
+   "opis": "Sprzedam czerwony motocykl Honda o charakterze enduro. Motocykl ma wysoką przednią szybę, osłony dłoni i szprychowe koła. Wyposażony jest w boczne sakwy, które przydadzą się podczas dalszych wyjazdów. To propozycja dla osób szukających motocykla do jazdy turystycznej i po mniej utwardzonych drogach. Szczegóły dotyczące modelu, rocznika i stanu technicznego można uzupełnić w parametrach.",
    "parametry": {
-    "marka": "do uzupełnienia",
+    "marka": "Honda",
     "model": "do uzupełnienia",
     "rocznik": "do uzupełnienia",
     "typ nadwozia": "enduro",
     "kolor": "czerwony",
-    "stan": "używany; stan techniczny do uzupełnienia"
+    "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "marka i model",
+    "model",
     "rocznik",
-    "pojemność i moc silnika",
-    "przebieg",
-    "stan techniczny",
-    "informacje o dokumentach i badaniu technicznym"
+    "stan techniczny"
    ]
   },
-  "seconds": 8.0,
-  "input_tokens": 805,
-  "output_tokens": 782
+  "seconds": 6.8,
+  "input_tokens": 897,
+  "output_tokens": 613
  },
  {
   "zdjecie": "5_motocykl.jpg",
@@ -489,61 +488,60 @@
   "listing": {
    "kategoria": "Motocykl",
    "platforma": "Otomoto",
-   "tytul": "Motocykl enduro czerwony z oponami terenowymi",
-   "opis": "Na sprzedaż motocykl typu enduro w czerwono-białej kolorystyce. Motocykl wygląda na używany; jego stan techniczny wymaga uzupełnienia. Ma opony z terenowym bieżnikiem, osłony dłoni i wysoką przednią szybę. Na zdjęciu widoczne są także boczne sakwy. To propozycja dla osób szukających motocykla do jazdy po drogach gruntowych.",
+   "tytul": "Honda enduro czerwona z sakwami i osłonami",
+   "opis": "Sprzedam motocykl Honda typu enduro w czerwonym kolorze. Motocykl jest wyposażony w sakwy boczne i torbę bagażową. Posiada osłony dłoni, osłonę silnika oraz przednią szybę. To propozycja dla osób szukających motocykla na wyprawy po drogach i szutrach.",
    "parametry": {
-    "marka": "do uzupełnienia",
+    "marka": "Honda",
     "model": "do uzupełnienia",
     "rocznik": "do uzupełnienia",
     "typ nadwozia": "enduro",
-    "kolor": "czerwono-biały",
+    "kolor": "czerwony",
     "stan": "używany"
    },
    "do_uzupelnienia": [
-    "Marka i model",
+    "Model",
     "Rocznik",
+    "Pojemność silnika",
     "Przebieg",
-    "Pojemność i moc silnika",
     "Stan techniczny",
-    "Informacja, czy sakwy są w zestawie"
+    "Historia serwisowa",
+    "Status rejestracji i ubezpieczenia",
+    "Informacja, czy sakwy i torba są w zestawie"
    ]
   },
-  "seconds": 9.3,
-  "input_tokens": 805,
-  "output_tokens": 596
+  "seconds": 7.4,
+  "input_tokens": 897,
+  "output_tokens": 451
  },
  {
   "zdjecie": "5_motocykl.jpg",
   "model": "gpt-6.2-sol",
   "tytul_wejsciowy": "",
   "listing": {
-   "kategoria": "Motocykle",
+   "kategoria": "Motocykl",
    "platforma": "Otomoto",
-   "tytul": "Honda enduro z oponami terenowymi i osłoną silnika",
-   "opis": "Sprzedam używany motocykl Honda typu enduro w czerwono-białym kolorze. Motocykl ma szprychowe koła z oponami o kostkowym bieżniku. Na zdjęciu widać osłony dłoni, przednią szybę i osłonę silnika. To propozycja dla osób szukających motocykla do jazdy po szutrach i drogach gruntowych.",
+   "tytul": "Honda XR – czerwono-białe enduro z wysoką szybą",
+   "opis": "Sprzedam czerwono-białą Hondę XR. Motocykl ma wysoką szybę, osłony dłoni i osłonę pod silnikiem. Szprychowe koła są wyposażone w opony z kostkowym bieżnikiem. To propozycja dla osób, które szukają motocykla na szutrowe trasy i wypady poza asfalt.",
    "parametry": {
     "marka": "Honda",
-    "model": "do uzupełnienia",
+    "model": "XR",
     "rocznik": "do uzupełnienia",
-    "typ nadwozia": "enduro",
-    "kolor": "czerwony z białymi elementami",
-    "stan": "używany",
-    "stan techniczny": "do uzupełnienia",
-    "przebieg": "do uzupełnienia",
-    "pojemność silnika": "do uzupełnienia"
+    "typ nadwozia": "Enduro",
+    "kolor": "Czerwono-biały",
+    "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "Dokładny model i wersja",
+    "Dokładna wersja modelu",
     "Rok produkcji",
-    "Stan techniczny",
     "Przebieg",
     "Pojemność silnika",
-    "Informacja, czy widoczne na zdjęciu torby są w zestawie"
+    "Stan techniczny i wizualny",
+    "Czy torby bagażowe są w zestawie"
    ]
   },
-  "seconds": 9.9,
-  "input_tokens": 805,
-  "output_tokens": 441
+  "seconds": 8.7,
+  "input_tokens": 897,
+  "output_tokens": 342
  },
  {
   "zdjecie": "5_motocykl.jpg",
@@ -552,25 +550,26 @@
   "listing": {
    "kategoria": "motocykl",
    "platforma": "Otomoto",
-   "tytul": "Honda XR 600 R czerwony motocykl terenowy",
-   "opis": "Oferuję Hondę XR 600 R, motocykl terenowy w atrakcyjnym czerwonym kolorze. Maszyna jest przygotowana do jazdy w trudnym terenie, posiada dużą oponę z bieżnikiem off-road oraz osłony kierownicy. Stan techniczny i wizualny dobry, idealny dla miłośników off-roadu i przygód w terenie. Wyposażony w sakwy dla praktycznego przewożenia rzeczy. To sprawdzona konstrukcja o niezawodnym silniku jednocylindrowym.",
+   "tytul": "Honda XL 600 R enduro 1 cylindr 600 cm3 4T terenowy",
+   "opis": "Na sprzedaż Honda XL 600 R z silnikiem 1-cylindrowym, idealna do jazdy terenowej i na długie wyprawy. Motocykl ma terenowe opony i solidne wyposażenie na trudne trasy, w tym osłony kierownicy oraz torby na bagaż. Stan techniczny do uzupełnienia, ale jednoślad prezentuje się bardzo dobrze i jest gotowy do jazdy. Dobra propozycja dla miłośników enduro i offroadu.",
    "parametry": {
     "marka": "Honda",
-    "model": "XR 600 R",
+    "model": "XL 600 R",
+    "rocznik": "do uzupełnienia",
+    "typ nadwozia": "motocykl enduro",
     "kolor": "czerwony",
-    "typ nadwozia": "motocykl terenowy",
     "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
     "rok produkcji",
+    "stan techniczny",
     "przebieg",
-    "dokumentacja i pierwsza rejestracja",
-    "aktualny stan techniczny, np. serwis, wymienione części"
+    "dokładny opis wyposażenia"
    ]
   },
-  "seconds": 4.0,
-  "input_tokens": 932,
-  "output_tokens": 270
+  "seconds": 3.1,
+  "input_tokens": 1024,
+  "output_tokens": 262
  },
  {
   "zdjecie": "1_salon.jpg",
@@ -579,38 +578,37 @@
   "listing": {
    "kategoria": "nieruchomość",
    "platforma": "Otodom",
-   "tytul": "Mieszkanie 2-pokojowe, 48 m², balkon – Poznań Jeżyce",
-   "opis": "Mieszkanie o powierzchni 48 m², z 2 pokojami i balkonem, położone w poznańskiej dzielnicy Jeżyce. Na zdjęciu widać jasną część dzienną z dużymi oknami, stołem jadalnianym i umeblowaniem. Przeszklenia zapewniają dużo światła w pomieszczeniu. Widoczne wyposażenie może być przydatne dla osób szukających mieszkania gotowego do własnej aranżacji lub zamieszkania. Szczegółowy stan techniczny i wykończenie wymagają uzupełnienia.",
+   "tytul": "Mieszkanie 2-pokojowe, 48 m² z balkonem – Poznań Jeżyce",
+   "opis": "Sprzedam 2-pokojowe mieszkanie o powierzchni 48 m² na poznańskich Jeżycach. Mieszkanie ma balkon oraz duże przeszklenia, które dobrze doświetlają wnętrze. W części dziennej znajduje się miejsce do wypoczynku i jadalnia. Wnętrze jest urządzone w jasnej kolorystyce i wyposażone w meble widoczne w pomieszczeniu. To propozycja dla pary, singla lub osób szukających mieszkania w Poznaniu.",
    "parametry": {
     "rodzaj": "mieszkanie",
     "liczba pokoi": "2",
     "metraż": "48 m²",
     "piętro": "do uzupełnienia",
     "stan wykończenia": "do uzupełnienia",
-    "umeblowanie": "widoczne umeblowanie części dziennej; pełne umeblowanie do uzupełnienia",
+    "umeblowanie": "do uzupełnienia",
     "lokalizacja": "Poznań, Jeżyce",
-    "balkon": "tak (wg tytułu ogłoszenia)"
+    "balkon": "tak"
    },
    "do_uzupelnienia": [
     "piętro",
-    "stan wykończenia i stan techniczny",
-    "zakres umeblowania całego mieszkania",
-    "potwierdzenie balkonu i pozostałe szczegóły nieruchomości"
+    "stan wykończenia",
+    "umeblowanie całego mieszkania"
    ]
   },
-  "seconds": 6.5,
-  "input_tokens": 1506,
-  "output_tokens": 558
+  "seconds": 5.9,
+  "input_tokens": 1639,
+  "output_tokens": 596
  },
  {
   "zdjecie": "2_kuchnia.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "Mieszkanie 3-pokojowe 62 m2 po remoncie, Poznań Wilda",
   "listing": {
-   "kategoria": "Nieruchomość – mieszkanie",
+   "kategoria": "Mieszkanie",
    "platforma": "Otodom",
    "tytul": "Mieszkanie 3-pokojowe, 62 m² po remoncie – Poznań Wilda",
-   "opis": "Na sprzedaż 3-pokojowe mieszkanie o powierzchni 62 m², po remoncie, położone na poznańskiej Wildzie. Na zdjęciu widoczna jest kuchnia z białą płytką na ścianie, drewnianymi półkami oraz zlewem. Wnętrze ma ciepły, domowy charakter. To propozycja dla osób szukających mieszkania na Wildzie; szczegóły dotyczące układu i wyposażenia wymagają uzupełnienia.",
+   "opis": "Sprzedam 3-pokojowe mieszkanie o powierzchni 62 m², po remoncie, na poznańskiej Wildzie. W kuchni znajduje się zlew, bateria oraz drewniana półka ścienna. To propozycja dla osób szukających mieszkania w mieście, zarówno dla siebie, jak i pod inwestycję. Zapraszam do kontaktu w sprawie szczegółów i obejrzenia mieszkania.",
    "parametry": {
     "rodzaj": "mieszkanie",
     "liczba pokoi": "3",
@@ -621,99 +619,93 @@
     "lokalizacja": "Poznań, Wilda"
    },
    "do_uzupelnienia": [
-    "Piętro",
-    "Informacja, czy mieszkanie jest umeblowane",
-    "Zakres i termin remontu",
-    "Układ pomieszczeń"
+    "piętro",
+    "informacja o umeblowaniu"
    ]
   },
-  "seconds": 6.9,
-  "input_tokens": 1430,
-  "output_tokens": 651
+  "seconds": 6.2,
+  "input_tokens": 1563,
+  "output_tokens": 594
  },
  {
   "zdjecie": "3_golf.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "Volkswagen Golf IV 1.4 16V benzyna 1998",
   "listing": {
-   "kategoria": "Samochód osobowy",
+   "kategoria": "samochód osobowy",
    "platforma": "Otomoto",
-   "tytul": "Volkswagen Golf 1.4 16V benzyna, 1998",
-   "opis": "Na zdjęciu widoczny jest biały Volkswagen Golf w nadwoziu hatchback. Sprzedający podaje silnik benzynowy 1.4 16V oraz rocznik 1998. Samochód prezentuje się na zdjęciu czysto i estetycznie, jednak jego stan techniczny nie jest możliwy do oceny. Wygląd auta wskazuje na generację Golf III, co może być rozbieżne z podanym przez sprzedającego Golfem IV. Przed publikacją warto potwierdzić generację i uzupełnić informacje o stanie pojazdu.",
+   "tytul": "Volkswagen Golf III 1.4 16V benzyna, 1998",
+   "opis": "Sprzedam Volkswagena Golfa III z 1998 roku, z benzynowym silnikiem 1.4 16V. To kompaktowy samochód z pięciodrzwiowym nadwoziem hatchback. Biały kolor i praktyczna, klasyczna sylwetka sprawiają, że będzie odpowiedni dla osób szukających kompaktowego auta. Samochód ma czarne elementy wykończenia zderzaków i listew bocznych.",
    "parametry": {
     "marka": "Volkswagen",
-    "model": "Golf (na zdjęciu widoczna generacja III; do weryfikacji)",
-    "rocznik": "1998 (według tytułu sprzedającego)",
-    "silnik": "1.4 16V, benzyna (według tytułu sprzedającego)",
-    "typ nadwozia": "hatchback",
+    "model": "Golf III",
+    "rocznik": "1998",
+    "typ nadwozia": "hatchback, 5-drzwiowy",
     "kolor": "biały",
-    "stan": "wizualnie czysty na zdjęciu; stan techniczny do uzupełnienia"
+    "stan": "do uzupełnienia",
+    "silnik": "1.4 16V, benzyna"
    },
    "do_uzupelnienia": [
-    "Potwierdzić generację/model: w tytule podano Golf IV, na zdjęciu widoczny jest Golf III",
-    "Przebieg",
-    "Stan techniczny",
-    "Skrzynia biegów"
+    "Potwierdzić model: tytuł podaje Golf IV, natomiast samochód odpowiada wizualnie Golfowi III.",
+    "Stan techniczny i historia pojazdu"
    ]
   },
   "seconds": 9.4,
-  "input_tokens": 1424,
-  "output_tokens": 993
+  "input_tokens": 1557,
+  "output_tokens": 947
  },
  {
   "zdjecie": "4_sofa.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "Sofa IKEA Klippan 2-osobowa",
   "listing": {
-   "kategoria": "Meble – sofa",
+   "kategoria": "Sofa",
    "platforma": "OLX",
    "tytul": "Sofa IKEA Klippan 2-osobowa, czerwona",
-   "opis": "Czerwona, dwuosobowa sofa IKEA Klippan z podłokietnikami. Ma tapicerkę z tkaniny i metalowe nóżki. Na zdjęciu widoczne są zagniecenia materiału; stan techniczny i ewentualne uszkodzenia wymagają potwierdzenia. Sprawdzi się jako sofa do salonu lub mniejszego pokoju. Wymiary i szczegóły dotyczące tapicerki do uzupełnienia.",
+   "opis": "Sprzedam czerwoną sofę IKEA Klippan dla dwóch osób. Ma proste, nowoczesne kształty, szerokie podłokietniki i tapicerowane siedzisko oraz oparcie. Sprawdzi się w salonie, pokoju gościnnym lub niewielkim mieszkaniu. Intensywny kolor będzie wyrazistym akcentem we wnętrzu.",
    "parametry": {
     "kategoria": "Sofa",
     "marka": "IKEA",
     "model": "Klippan",
-    "materiał": "Tapicerka tekstylna; materiał konstrukcji do uzupełnienia",
-    "kolor": "Czerwony",
-    "stan": "Używany; widoczne zagniecenia tapicerki",
-    "liczba miejsc": "2"
+    "materiał": "tapicerka materiałowa; pozostałe materiały do uzupełnienia",
+    "kolor": "czerwony",
+    "stan": "do uzupełnienia"
    },
    "do_uzupelnienia": [
-    "Wymiary",
-    "Dokładny materiał tapicerki i konstrukcji",
-    "Informacja o ewentualnych uszkodzeniach i stanie technicznym"
+    "stan techniczny i wizualny"
    ]
   },
-  "seconds": 5.2,
-  "input_tokens": 1496,
-  "output_tokens": 506
+  "seconds": 4.1,
+  "input_tokens": 1629,
+  "output_tokens": 363
  },
  {
   "zdjecie": "5_motocykl.jpg",
   "model": "gpt-6-luna",
   "tytul_wejsciowy": "Honda XR 250 Baja 2004",
   "listing": {
-   "kategoria": "Motocykl",
+   "kategoria": "motocykl",
    "platforma": "Otomoto",
-   "tytul": "Honda XR 250 Baja 2004 – motocykl enduro",
-   "opis": "Honda XR 250 Baja z 2004 roku, w czerwonym kolorze. Na zdjęciu widoczny jest motocykl z wysoką przednią szybą, terenowym ogumieniem i bocznymi torbami bagażowymi. Pojazd nosi ślady użytkowania; jego stan techniczny wymaga uzupełnienia przez sprzedającego. Może zainteresować osobę szukającą motocykla do jazdy poza asfaltem lub turystyki.",
+   "tytul": "Honda XR 250 Baja 2004, motocykl enduro",
+   "opis": "Sprzedam Hondę XR 250 Baja z 2004 roku. Motocykl w czerwonym kolorze ma wysoką przednią owiewkę z reflektorem oraz osłony dłoni. Wyposażony jest także w boczne sakwy, przydatne podczas wyjazdów. To propozycja dla osób szukających motocykla w stylu enduro do jazdy turystycznej i poza asfaltem.",
    "parametry": {
     "marka": "Honda",
     "model": "XR 250 Baja",
     "rocznik": "2004",
-    "typ nadwozia": "Enduro",
+    "typ nadwozia": "enduro",
     "kolor": "czerwony",
     "stan": "używany"
    },
    "do_uzupelnienia": [
-    "Przebieg",
-    "Pojemność silnika",
-    "Stan techniczny",
-    "Dokumenty i ważność badań technicznych"
+    "przebieg",
+    "pojemność silnika",
+    "stan techniczny",
+    "rodzaj paliwa",
+    "moc"
    ]
   },
-  "seconds": 5.8,
-  "input_tokens": 932,
-  "output_tokens": 628
+  "seconds": 5.4,
+  "input_tokens": 1065,
+  "output_tokens": 521
  }
 ]
