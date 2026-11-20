@@ -4,7 +4,7 @@
 
 Na bazie template'u `streamlit_image_processing` zbudowaliśmy działającą lokalnie aplikację (część 1 projektu):
 
-- wgranie zdjęcia (jpg, png, webp) i wybór modelu OpenAI (`gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol`, `gpt-4.1-mini` albo dowolny inny ID);
+- wgranie zdjęcia (jpg, png, webp) i wybór modelu OpenAI (`gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol`, `gpt-4.1-mini`);
 - nowy prompt: model rozpoznaje typ obiektu, dobiera platformę (Otodom / Otomoto / OLX) i zwraca JSON z **tytułem, opisem, parametrami** i listą informacji **do uzupełnienia** przez sprzedającego;
 - **rozszerzenie:** opcjonalne pole „Tytuł ogłoszenia”; jego fakty trafiają do opisu i parametrów;
 - wynik jako sformatowane ogłoszenie (tytuł, opis, tabela parametrów), pod nim czas odpowiedzi i liczba tokenów, a w rozwijanym panelu surowy JSON;
