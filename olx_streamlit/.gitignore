@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.streamlit/secrets.toml
+artifacts/
+materialy/
+
+# Keep local test photos private; retain instructions and the empty folder marker.
+zdjecia/*
+!zdjecia/README.md
+!zdjecia/.gitkeep
